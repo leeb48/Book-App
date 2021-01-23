@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   nginx:
     depends_on:
@@ -11,12 +11,13 @@ services:
     environment:
       PORT: 80
     ports:
-      - "80:80"
+      - '80:80'
 
   backend:
     build:
       dockerfile: Dockerfile.dev
       context: ./server
+    env_file: .env
 
   client:
     stdin_open: true

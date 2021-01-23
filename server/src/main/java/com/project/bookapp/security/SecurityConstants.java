@@ -12,6 +12,6 @@ public class SecurityConstants {
     public static final int TOKEN_COOKIE_EXPIRE_TIME = 10;
     public static final long REFRESH_TOKEN_EXPIRATION_TIME = TimeUnit.DAYS.toMillis(3);
 
-    public static final String OAUTH2_SUCCESS_REDIRECT_URL = "http://localhost:3000";
-    public static final String OAUTH2_FAILURE_REDIRECT_URL = "http://localhost:3000/login-error";
+    public static final String OAUTH2_SUCCESS_REDIRECT_URL = System.getenv("OAUTH2_SUCCESS_REDIRECT_URL");
+    public static final String OAUTH2_FAILURE_REDIRECT_URL = System.getenv("OAUTH2_FAILURE_REDIRECT_URL");
 }

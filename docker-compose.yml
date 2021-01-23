@@ -1,0 +1,25 @@
+version: "3"
+services:
+  nginx:
+    depends_on:
+      - backend
+      - client
+    restart: always
+    build:
+      dockerfile: Dockerfile
+      context: ./nginx
+    environment:
+      PORT: 80
+    ports:
+      - "80:80"
+
+  backend:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+
+  client:
+    stdin_open: true
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./client

@@ -97,8 +97,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 ).permitAll()
                 .antMatchers(SIGN_UP_URLS).permitAll()
                 .antMatchers(OAUTH2_URLS, "/api/test").permitAll()
+                // TODO: remove after developing book resource routes
+                .antMatchers("/api/books/*").permitAll()
                 .anyRequest().authenticated()
                 .and()
+
 
                 .oauth2Login()
                 .authorizationEndpoint()

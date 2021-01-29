@@ -1,5 +1,5 @@
 import { EnhancedStore } from "@reduxjs/toolkit";
-import { refreshTokenApi, RefreshTokenDto } from "api/springApi";
+import { refreshTokenApi, RefreshTokenDto } from "api/authApi";
 import axios from "axios";
 import { refreshTokenSuccess } from "features/userAuth/userSlice";
 

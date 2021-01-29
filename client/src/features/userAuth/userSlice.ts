@@ -7,9 +7,9 @@ import {
   LoginUserResponseDto,
   RegisterUserDto,
   RegisterUserResponseDto,
-} from "api/springApi";
+} from "api/authApi";
 import { AppThunk } from "app/store";
-import { registerUserApi } from "api/springApi";
+import { registerUserApi } from "api/authApi";
 import {
   clearInputErrors,
   InputErrors,
@@ -74,7 +74,6 @@ const logoutReducer: CaseReducer<UserState> = (state) => {
   localStorage.removeItem("jwt");
   localStorage.removeItem("refreshToken");
 };
-
 const userInfo = createSlice({
   name: "user",
   initialState,

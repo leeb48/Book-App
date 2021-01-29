@@ -1,3 +1,4 @@
+import SearchForm from "components/bookSearch/SearchForm";
 import Oauth2LoginError from "components/errors/Oauth2LoginError";
 import Navbar from "components/layout/Navbar";
 import { loadUser } from "features/userAuth/userSlice";
@@ -24,10 +25,11 @@ function App() {
     <Router>
       <Navbar />
       <Switch>
-        <Route exact path="/" component={Landing}></Route>
-        <Route exact path="/login" component={Login}></Route>
-        <Route exact path="/register" component={Register}></Route>
+        <Route exact path="/" component={Landing} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/register" component={Register} />
         <Route exact path="/oauth2/login-error" component={Oauth2LoginError} />
+        <Route exact path="/search" component={SearchForm} />
       </Switch>
     </Router>
   );

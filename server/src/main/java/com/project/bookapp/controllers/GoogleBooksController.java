@@ -1,6 +1,7 @@
 package com.project.bookapp.controllers;
 
 import com.project.bookapp.domain.googlebooks.GoogleBooksResponse;
+import com.project.bookapp.exceptions.controllerExceptions.EmptySearchTermException;
 import com.project.bookapp.payload.bookspayload.BookSearchRequest;
 import com.project.bookapp.services.ValidationService;
 import org.springframework.http.HttpHeaders;
@@ -46,7 +47,6 @@ public class GoogleBooksController {
 
         String searchUri = createSearchQuery(searchRequest) + API_KEY;
 
-        System.out.println(searchUri);
 
         GoogleBooksResponse res = webClient.get()
                 .uri(searchUri)
@@ -55,19 +55,30 @@ public class GoogleBooksController {
                 .block();
 
 
-        return ResponseEntity.ok(res.items);
+        return ResponseEntity.ok(res);
 
     }
 
     private String createSearchQuery(BookSearchRequest searchRequest) {
 
-        String title = "intitle:" + searchRequest.getTitle();
-        String author = "inauthor:" + searchRequest.getAuthor();
-        String publisher = "inpublisher:" + searchRequest.getPublisher();
-        String subject = "subject:" + searchRequest.getSubject();
-        String isbn = "isbn:" + searchRequest.getIsbn();
+        String generalSearch = !searchRequest.getGeneralSearch().trim().equals("") ? searchRequest.getGeneralSearch() : "";
+        String title = !searchRequest.getTitle().trim().equals("") ? "+intitle:" + searchRequest.getTitle() : "";
+        String author = !searchRequest.getAuthor().trim().equals("") ? "+inauthor:" + searchRequest.getAuthor() : "";
+        String publisher = !searchRequest.getPublisher().trim().equals("") ? "+inpublisher:" + searchRequest.getPublisher() : "";
+        String subject = !searchRequest.getSubject().trim().equals("") ? "+subject:" + searchRequest.getSubject() : "";
+        String isbn = !searchRequest.getIsbn().trim().equals("") ? "+isbn:" + searchRequest.getIsbn() : "";
+        String startIndex = String.valueOf(searchRequest.getStartIndex());
+        String resultsPerPage = String.valueOf(searchRequest.getResultsPerPage());
 
-        return String.format("?q=%s+%s+%s+%s+%s", title, author, publisher, subject, isbn);
+        String searchTerms = String.format("%s%s%s%s%s%s", generalSearch, title, author, publisher, subject, isbn);
+        String searchModifiers = String.format("&startIndex=%s&maxResults=%s", startIndex, resultsPerPage);
+
+        if (searchTerms.equals("")) {
+            throw new EmptySearchTermException("At least one search term must be provided");
+        }
+
+        return String.format("?q=%s%s", searchTerms, searchModifiers);
+
     }
 
 }

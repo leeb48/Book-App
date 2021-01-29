@@ -8,11 +8,12 @@ import javax.validation.constraints.Min;
 @Data
 public class BookSearchRequest {
 
-    private String title;
-    private String author;
-    private String publisher;
-    private String subject;
-    private String isbn;
+    private String generalSearch = "";
+    private String title = "";
+    private String author = "";
+    private String publisher = "";
+    private String subject = "";
+    private String isbn = "";
 
     private Integer startIndex = 0;
 

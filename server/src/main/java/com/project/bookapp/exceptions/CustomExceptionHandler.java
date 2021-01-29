@@ -1,5 +1,6 @@
 package com.project.bookapp.exceptions;
 
+import com.project.bookapp.exceptions.controllerExceptions.EmptySearchTermException;
 import com.project.bookapp.exceptions.entityexceptions.DuplicateUsernameException;
 import com.project.bookapp.exceptions.entityexceptions.DuplicateUsernameResponse;
 import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
@@ -21,16 +22,16 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
-    public final ResponseEntity<Object> handleDuplicateUsernameException(DuplicateUsernameException ex,
-                                                                         WebRequest request) {
+    public final ResponseEntity<Object> handleDuplicateUsernameExceptionHandler(DuplicateUsernameException ex,
+                                                                                WebRequest request) {
         DuplicateUsernameResponse exceptionRes = new DuplicateUsernameResponse(ex.getMessage());
 
         return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public final ResponseEntity<Object> handleDuplicateUsernameException(UserNotFoundException ex,
-                                                                         WebRequest request) {
+    public final ResponseEntity<Object> handleDuplicateUsernameExceptionHandler(UserNotFoundException ex,
+                                                                                WebRequest request) {
 
         UserNotFoundResponse exceptionRes = new UserNotFoundResponse(ex.getMessage());
 
@@ -39,27 +40,36 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 
     @ExceptionHandler
-    public final ResponseEntity<Object> authenticationException(AuthenticationException ex,
-                                                                WebRequest request) {
+    public final ResponseEntity<Object> authenticationExceptionHandler(AuthenticationException ex,
+                                                                       WebRequest request) {
         ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
 
         return new ResponseEntity<>(exceptionRes, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
-    public final ResponseEntity<Object> authenticationException(RefreshTokenMismatchException ex,
-                                                                WebRequest request) {
+    public final ResponseEntity<Object> authenticationExceptionHandler(RefreshTokenMismatchException ex,
+                                                                       WebRequest request) {
         ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
 
         return new ResponseEntity<>(exceptionRes, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
-    public final ResponseEntity<Object> oAuth2AuthenticationException(Oauth2AuthenticationException ex,
-                                                                      WebRequest request) {
+    public final ResponseEntity<Object> oAuth2AuthenticationExceptionHandler(Oauth2AuthenticationException ex,
+                                                                             WebRequest request) {
         ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
 
         return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> EmptySearchTermExceptionHandler(EmptySearchTermException ex,
+                                                                        WebRequest request) {
+        ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
+
+        return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
+    }
+
 
 }

@@ -15,3 +15,22 @@ export const searchBooksApi = async (data: SearchInfo) => {
     console.log(error.response.data);
   }
 };
+
+export const searchBooksPaginationApi = async (
+  startIdx: number,
+  data: SearchInfo
+) => {
+  try {
+    let paginationRequest = Object.assign({}, data);
+    paginationRequest.startIndex = startIdx;
+
+    const res = await springAxios.post<BookSearchResponse>(
+      "/books/search",
+      paginationRequest
+    );
+
+    return res.data;
+  } catch (error) {
+    console.log(error);
+  }
+};

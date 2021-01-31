@@ -45,7 +45,15 @@ const BookItem = ({ book }: Props) => {
           xs={3}
         />
         <Grid item xs={8}>
-          Details
+          Title: {JSON.stringify(book.volumeInfo.title)}
+          <br />
+          Author(s): {JSON.stringify(book.volumeInfo.authors)}
+          <br />
+          Description: {JSON.stringify(book.volumeInfo.description)}
+          <br />
+          Publisher: {JSON.stringify(book.volumeInfo.publisher)}
+          <br />
+          ISBN: {JSON.stringify(book.volumeInfo.industryIdentifiers)}
         </Grid>
       </Grid>
     </Paper>

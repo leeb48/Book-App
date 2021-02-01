@@ -1,9 +1,9 @@
 package com.project.bookapp.security.oauth2;
 
-import com.project.bookapp.services.UserService;
-import com.project.bookapp.domain.User;
+import com.project.bookapp.domain.UserEntity;
 import com.project.bookapp.exceptions.oauth2exceptions.Oauth2AuthenticationException;
 import com.project.bookapp.security.jwt.JwtTokenProvider;
+import com.project.bookapp.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -37,16 +37,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         Oauth2UserPrincipal userPrincipal = (Oauth2UserPrincipal) authentication.getPrincipal();
 
-        User user = userService.findUserByUsername(userPrincipal.getUsername());
+        UserEntity userEntity = userService.findUserByUsername(userPrincipal.getUsername());
 
-        String jwt = jwtTokenProvider.generateToken(user);
+        String jwt = jwtTokenProvider.generateToken(userEntity);
         String refreshToken = jwtTokenProvider.generateRefreshToken();
 
 
-        user.setRefreshToken(refreshToken);
+        userEntity.setRefreshToken(refreshToken);
 
         try {
-            userService.saveUser(user);
+            userService.saveUser(userEntity);
         } catch (Exception ex) {
             throw new Oauth2AuthenticationException("Exception thrown at 'onAuthenticationSuccess'.");
         }

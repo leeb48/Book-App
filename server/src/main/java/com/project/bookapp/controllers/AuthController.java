@@ -1,7 +1,9 @@
 package com.project.bookapp.controllers;
 
 import com.project.bookapp.domain.AuthProvider;
-import com.project.bookapp.domain.User;
+import com.project.bookapp.domain.UserEntity;
+import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
+import com.project.bookapp.exceptions.securityexceptions.RefreshTokenMismatchException;
 import com.project.bookapp.payload.authpayload.JwtLoginSuccessRes;
 import com.project.bookapp.payload.authpayload.LoginRequest;
 import com.project.bookapp.payload.authpayload.RefreshTokenRequest;
@@ -9,8 +11,6 @@ import com.project.bookapp.payload.authpayload.RegisterUserRequest;
 import com.project.bookapp.security.jwt.JwtTokenProvider;
 import com.project.bookapp.services.UserService;
 import com.project.bookapp.services.ValidationService;
-import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
-import com.project.bookapp.exceptions.securityexceptions.RefreshTokenMismatchException;
 import com.project.bookapp.validators.UserValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -66,14 +66,14 @@ public class AuthController {
                 )
         );
 
-        User user = (User) authentication.getPrincipal();
+        UserEntity userEntity = (UserEntity) authentication.getPrincipal();
 
-        String jwt = jwtTokenProvider.generateToken(user);
+        String jwt = jwtTokenProvider.generateToken(userEntity);
         String refreshToken = jwtTokenProvider.generateRefreshToken();
 
-        user.setRefreshToken(refreshToken);
+        userEntity.setRefreshToken(refreshToken);
 
-        userService.saveUser(user);
+        userService.saveUser(userEntity);
 
 
         return ResponseEntity.ok(new JwtLoginSuccessRes(true, jwt, refreshToken));
@@ -89,21 +89,21 @@ public class AuthController {
             return validationService.createErrorResponse(result);
         }
 
-        User newUser = new User();
+        UserEntity newUserEntity = new UserEntity();
 
-        newUser.setUsername(user.getUsername());
-        newUser.setPassword(user.getPassword());
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.setAuthProvider(AuthProvider.local);
+        newUserEntity.setUsername(user.getUsername());
+        newUserEntity.setPassword(user.getPassword());
+        newUserEntity.setFirstName(user.getFirstName());
+        newUserEntity.setLastName(user.getLastName());
+        newUserEntity.setAuthProvider(AuthProvider.local);
 
-        User createdUser = userService.saveUser(newUser);
+        UserEntity createdUserEntity = userService.saveUser(newUserEntity);
 
-        String jwt = jwtTokenProvider.generateToken(newUser);
+        String jwt = jwtTokenProvider.generateToken(newUserEntity);
         String refreshToken = jwtTokenProvider.generateRefreshToken();
 
-        createdUser.setRefreshToken(refreshToken);
-        userService.saveUser(createdUser);
+        createdUserEntity.setRefreshToken(refreshToken);
+        userService.saveUser(createdUserEntity);
 
         return ResponseEntity.ok(new JwtLoginSuccessRes(true, jwt, refreshToken));
     }
@@ -117,23 +117,23 @@ public class AuthController {
         String username = jwtTokenProvider.getUsernameFromExpiredJwt(jwt);
 
         // find the user and compare the passed in refresh token to the one stored in the DB
-        User user = userService.findUserByUsername(username);
+        UserEntity userEntity = userService.findUserByUsername(username);
 
-        if (user == null) {
+        if (userEntity == null) {
             throw new UserNotFoundException("User with username '" + username + "' not found");
         }
 
-        if (!user.getRefreshToken().equals(refreshTokenRequest.getRefreshToken()) ||
+        if (!userEntity.getRefreshToken().equals(refreshTokenRequest.getRefreshToken()) ||
                 !jwtTokenProvider.validateToken(refreshTokenRequest.getRefreshToken())) {
             throw new RefreshTokenMismatchException("Invalid refreshToken");
         }
 
         // generate new tokens
-        String newJwt = jwtTokenProvider.generateToken(user);
+        String newJwt = jwtTokenProvider.generateToken(userEntity);
         String newRefreshToken = jwtTokenProvider.generateRefreshToken();
 
-        user.setRefreshToken(newRefreshToken);
-        userService.saveUser(user);
+        userEntity.setRefreshToken(newRefreshToken);
+        userService.saveUser(userEntity);
 
 
         return ResponseEntity.ok(new JwtLoginSuccessRes(true, newJwt, newRefreshToken));

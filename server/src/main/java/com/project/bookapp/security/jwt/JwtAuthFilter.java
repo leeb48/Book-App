@@ -1,9 +1,9 @@
 package com.project.bookapp.security.jwt;
 
-import com.project.bookapp.services.UserService;
-import com.project.bookapp.domain.User;
+import com.project.bookapp.domain.UserEntity;
 import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import com.project.bookapp.exceptions.securityexceptions.AuthenticationException;
+import com.project.bookapp.services.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -41,14 +41,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             // validate jwt
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 Long userId = jwtTokenProvider.getUserIdFromJwt(jwt);
-                User user = userService.loadUserById(userId);
+                UserEntity userEntity = userService.loadUserById(userId);
 
-                if (user == null) throw new UserNotFoundException("User with ID: '" + userId + "' not found.");
+                if (userEntity == null) throw new UserNotFoundException("User with ID: '" + userId + "' not found.");
 
 
                 // create a valid authentication object with user
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        user,
+                        userEntity,
                         // Roles
                         null,
                         // Authorities

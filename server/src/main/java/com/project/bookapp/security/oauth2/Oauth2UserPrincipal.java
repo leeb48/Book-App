@@ -1,6 +1,6 @@
 package com.project.bookapp.security.oauth2;
 
-import com.project.bookapp.domain.User;
+import com.project.bookapp.domain.UserEntity;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,12 +25,12 @@ public class Oauth2UserPrincipal implements OAuth2User {
         this.authorities = authorities;
     }
 
-    public static Oauth2UserPrincipal create(User user) {
+    public static Oauth2UserPrincipal create(UserEntity userEntity) {
         List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
 
         return new Oauth2UserPrincipal(
-                user.getId(),
-                user.getUsername(),
+                userEntity.getId(),
+                userEntity.getUsername(),
                 authorities
         );
     }

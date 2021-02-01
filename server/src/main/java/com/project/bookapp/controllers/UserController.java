@@ -1,9 +1,9 @@
 package com.project.bookapp.controllers;
 
-import com.project.bookapp.domain.User;
+import com.project.bookapp.domain.UserEntity;
+import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import com.project.bookapp.payload.authpayload.UserInfoRes;
 import com.project.bookapp.services.UserService;
-import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +26,14 @@ public class UserController {
     @GetMapping("/get-user-info")
     public ResponseEntity<?> getUserInfo(Principal principal) {
 
-        User user = userService.findUserByUsername(principal.getName());
+        UserEntity userEntity = userService.findUserByUsername(principal.getName());
 
-        if (user == null) {
+        if (userEntity == null) {
             throw new UserNotFoundException("User with username '" + principal.getName() + "' not found.");
         }
 
         UserInfoRes response = new UserInfoRes(
-                user.getUsername(), user.getFirstName(), user.getLastName()
+                userEntity.getUsername(), userEntity.getFirstName(), userEntity.getLastName()
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);

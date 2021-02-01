@@ -13,12 +13,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
-public class User extends BaseEntity implements UserDetails {
+@Table(name = "USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+public class UserEntity extends BaseEntity implements UserDetails {
 
     @Email(message = "Username must be an email")
     @NotBlank(message = "Username is required")
@@ -47,6 +49,8 @@ public class User extends BaseEntity implements UserDetails {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
 
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
+    private Set<BookShelfEntity> bookShelfEntities = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {

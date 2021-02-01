@@ -1,6 +1,6 @@
 package com.project.bookapp.services;
 
-import com.project.bookapp.domain.User;
+import com.project.bookapp.domain.UserEntity;
 import com.project.bookapp.repositories.UserRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +15,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest {
+class UserEntityServiceTest {
 
     @Mock
     UserRepo userRepo;
@@ -34,14 +34,14 @@ class UserServiceTest {
     void saveUserWithDuplicateUsername() {
 
         // given
-        User newUser = new User();
-        newUser.setId(null);
-        newUser.setUsername("user1");
+        UserEntity newUserEntity = new UserEntity();
+        newUserEntity.setId(null);
+        newUserEntity.setUsername("user1");
         when(userRepo.existsByUsername(anyString())).thenReturn(true);
 
         // when
         Throwable thrown = assertThrows(Throwable.class,
-                () -> userService.saveUser(newUser),
+                () -> userService.saveUser(newUserEntity),
                 "Expected userService.saveUser to throw, but it didn't");
 
         assertTrue(thrown.getMessage().contains("Username already exists"));

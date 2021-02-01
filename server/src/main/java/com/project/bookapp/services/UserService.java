@@ -1,6 +1,6 @@
 package com.project.bookapp.services;
 
-import com.project.bookapp.domain.User;
+import com.project.bookapp.domain.UserEntity;
 import com.project.bookapp.exceptions.entityexceptions.DuplicateUsernameException;
 import com.project.bookapp.repositories.UserRepo;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,31 +22,31 @@ public class UserService implements UserDetailsService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
-    public User findUserByUsername(String username) {
+    public UserEntity findUserByUsername(String username) {
 
         return userRepo.findByUsername(username).orElse(null);
     }
 
-    public User saveUser(User user) throws Exception {
+    public UserEntity saveUser(UserEntity userEntity) throws Exception {
         try {
-            if (user.getId() == null) {
+            if (userEntity.getId() == null) {
 
-                if (userRepo.existsByUsername(user.getUsername())) {
+                if (userRepo.existsByUsername(userEntity.getUsername())) {
                     throw new DuplicateUsernameException("Username already exists");
                 }
 
-                user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+                userEntity.setPassword(bCryptPasswordEncoder.encode(userEntity.getPassword()));
 
             }
-            return userRepo.save(user);
+            return userRepo.save(userEntity);
 
         } catch (Exception e) {
             throw new Exception(e);
         }
     }
 
-    public User loadUserById(Long id) {
-        Optional<User> userOptional = userRepo.findById(id);
+    public UserEntity loadUserById(Long id) {
+        Optional<UserEntity> userOptional = userRepo.findById(id);
         if (!userOptional.isPresent()) {
             throw new UsernameNotFoundException("User Not Found");
         }

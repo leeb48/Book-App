@@ -23,7 +23,7 @@ import static com.project.bookapp.controllers.ControllerConstants.GOOGLE_BOOKS_B
 @RequestMapping(GoogleBooksController.BASE_URL)
 public class GoogleBooksController {
 
-    public static final String BASE_URL = "/api/books";
+    public static final String BASE_URL = "/api/search";
 
     private final ValidationService validationService;
 
@@ -32,7 +32,7 @@ public class GoogleBooksController {
     }
 
 
-    @PostMapping("/search")
+    @PostMapping()
     public ResponseEntity<?> searchBooks(@Valid @RequestBody BookSearchRequest searchRequest, BindingResult result) {
 
         if (result.hasErrors()) {

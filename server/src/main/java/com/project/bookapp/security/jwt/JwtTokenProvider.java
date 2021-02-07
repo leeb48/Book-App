@@ -1,6 +1,6 @@
 package com.project.bookapp.security.jwt;
 
-import com.project.bookapp.domain.UserEntity;
+import com.project.bookapp.domain.User;
 import com.project.bookapp.security.SecurityConstants;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
@@ -15,20 +15,20 @@ import java.util.Map;
 public class JwtTokenProvider {
 
     // generate token
-    public String generateToken(UserEntity userEntity) {
+    public String generateToken(User user) {
 
         Date now = new Date(System.currentTimeMillis());
         Date expireDate = new Date(now.getTime() + SecurityConstants.JWT_EXPIRATION_TIME);
 
-        String userId = Long.toString(userEntity.getId());
+        String userId = Long.toString(user.getId());
 
         // info about the user to put inside the jwt
         // insert ROLES and AUTHORITIES here if needed
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", userId);
-        claims.put("username", userEntity.getUsername());
-        claims.put("firstName", userEntity.getFirstName());
-        claims.put("lastName", userEntity.getLastName());
+        claims.put("username", user.getUsername());
+        claims.put("firstName", user.getFirstName());
+        claims.put("lastName", user.getLastName());
 
         return Jwts.builder()
                 .setSubject(userId)

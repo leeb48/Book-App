@@ -1,6 +1,6 @@
 package com.project.bookapp.controllers;
 
-import com.project.bookapp.domain.UserEntity;
+import com.project.bookapp.domain.User;
 import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import com.project.bookapp.payload.authpayload.UserInfoRes;
 import com.project.bookapp.services.UserService;
@@ -26,14 +26,14 @@ public class UserController {
     @GetMapping("/get-user-info")
     public ResponseEntity<?> getUserInfo(Principal principal) {
 
-        UserEntity userEntity = userService.findUserByUsername(principal.getName());
+        User user = userService.findUserByUsername(principal.getName());
 
-        if (userEntity == null) {
+        if (user == null) {
             throw new UserNotFoundException("User with username '" + principal.getName() + "' not found.");
         }
 
         UserInfoRes response = new UserInfoRes(
-                userEntity.getUsername(), userEntity.getFirstName(), userEntity.getLastName()
+                user.getUsername(), user.getFirstName(), user.getLastName()
         );
 
         return new ResponseEntity<>(response, HttpStatus.OK);

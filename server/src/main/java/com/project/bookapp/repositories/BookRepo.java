@@ -1,15 +1,14 @@
 package com.project.bookapp.repositories;
 
-import com.project.bookapp.domain.User;
+import com.project.bookapp.domain.Book;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepo extends CrudRepository<User, Long> {
+public interface BookRepo extends CrudRepository<Book, Long> {
 
-    Optional<User> findByUsername(String username);
+    Optional<Book> findByGoogleBooksId(String googleBooksId);
 
-    Boolean existsByUsername(String username);
 }

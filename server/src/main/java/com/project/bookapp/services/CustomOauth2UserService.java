@@ -1,7 +1,7 @@
 package com.project.bookapp.services;
 
 import com.project.bookapp.domain.AuthProvider;
-import com.project.bookapp.domain.UserEntity;
+import com.project.bookapp.domain.User;
 import com.project.bookapp.exceptions.oauth2exceptions.Oauth2AuthenticationException;
 import com.project.bookapp.repositories.UserRepo;
 import com.project.bookapp.security.oauth2.Oauth2UserPrincipal;
@@ -39,37 +39,37 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                         oAuth2User.getAttributes());
 
 
-        Optional<UserEntity> userOptional = userRepo.findByUsername(oAuth2UserInfo.getEmail());
+        Optional<User> userOptional = userRepo.findByUsername(oAuth2UserInfo.getEmail());
 
-        UserEntity userEntity;
+        User user;
         if (userOptional.isPresent()) {
 
-            userEntity = userOptional.get();
+            user = userOptional.get();
 
 
             String requestOauth2RegistrationId = oAuth2UserRequest.getClientRegistration().getRegistrationId();
 
-            if (!userEntity.getAuthProvider().equals(AuthProvider.valueOf(requestOauth2RegistrationId))) {
+            if (!user.getAuthProvider().equals(AuthProvider.valueOf(requestOauth2RegistrationId))) {
                 throw new Oauth2AuthenticationException("Looks like you're signed up with " +
-                        userEntity.getAuthProvider() + " account. Please use your " +
-                        userEntity.getAuthProvider() + " account to login.");
+                        user.getAuthProvider() + " account. Please use your " +
+                        user.getAuthProvider() + " account to login.");
             }
 
-            userRepo.save(userEntity);
+            userRepo.save(user);
 
         } else {
-            userEntity = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
+            user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }
 
-        return Oauth2UserPrincipal.create(userEntity);
+        return Oauth2UserPrincipal.create(user);
     }
 
-    private UserEntity registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
-        UserEntity userEntity = new UserEntity();
+    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+        User user = new User();
 
-        userEntity.setAuthProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
-        userEntity.setProviderId(oAuth2UserInfo.getId());
-        userEntity.setUsername(oAuth2UserInfo.getEmail());
-        return userRepo.save(userEntity);
+        user.setAuthProvider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()));
+        user.setProviderId(oAuth2UserInfo.getId());
+        user.setUsername(oAuth2UserInfo.getEmail());
+        return userRepo.save(user);
     }
 }

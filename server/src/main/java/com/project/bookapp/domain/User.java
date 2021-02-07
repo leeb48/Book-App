@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -20,7 +21,7 @@ import java.util.Set;
 @Entity
 @Data
 @Table(name = "USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
-public class UserEntity extends BaseEntity implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
 
     @Email(message = "Username must be an email")
     @NotBlank(message = "Username is required")
@@ -49,8 +50,9 @@ public class UserEntity extends BaseEntity implements UserDetails {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "userEntity", fetch = FetchType.LAZY)
-    private Set<BookShelfEntity> bookShelfEntities = new HashSet<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Set<BookShelf> bookShelves = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {

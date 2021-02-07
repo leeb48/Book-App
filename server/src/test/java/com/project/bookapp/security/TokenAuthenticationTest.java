@@ -1,6 +1,6 @@
 package com.project.bookapp.security;
 
-import com.project.bookapp.domain.UserEntity;
+import com.project.bookapp.domain.User;
 import com.project.bookapp.security.jwt.JwtTokenProvider;
 import com.project.bookapp.services.UserService;
 import org.junit.jupiter.api.Test;
@@ -40,14 +40,14 @@ public class TokenAuthenticationTest {
     @Test
     void accessWithValidJwt() throws Exception {
 
-        UserEntity testUserEntity = new UserEntity();
-        testUserEntity.setId(1L);
-        testUserEntity.setUsername("testUser");
+        User testUser = new User();
+        testUser.setId(1L);
+        testUser.setUsername("testUser");
 
-        when(userService.findUserByUsername(anyString())).thenReturn(testUserEntity);
-        when(userService.loadUserById(testUserEntity.getId())).thenReturn(testUserEntity);
+        when(userService.findUserByUsername(anyString())).thenReturn(testUser);
+        when(userService.loadUserById(testUser.getId())).thenReturn(testUser);
 
-        String jwt = "Bearer " + jwtTokenProvider.generateToken(testUserEntity);
+        String jwt = "Bearer " + jwtTokenProvider.generateToken(testUser);
 
         MvcResult result = mvc.perform(get("/api/users/get-user-info").header("Authorization", jwt))
                 .andExpect(status().isOk()).andReturn();

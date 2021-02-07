@@ -4,6 +4,8 @@ import com.project.bookapp.domain.Book;
 import com.project.bookapp.domain.BookShelf;
 import com.project.bookapp.domain.User;
 import com.project.bookapp.domain.googlebooks.Item;
+import com.project.bookapp.exceptions.entityexceptions.BookShelfNotFoundException;
+import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import com.project.bookapp.repositories.BookRepo;
 import com.project.bookapp.repositories.BookShelfRepo;
 import com.project.bookapp.repositories.UserRepo;
@@ -40,24 +42,30 @@ public class BookService {
     public BookShelf createBookShelf(String username, String bookShelfName) {
         Optional<User> user = userRepo.findByUsername(username);
 
-        if (user.isPresent()) {
-            BookShelf newBookShelf = new BookShelf();
-            newBookShelf.setUser(user.get());
-            newBookShelf.setBookShelfName(username + "-" + bookShelfName);
-
-            return bookShelfRepo.save(newBookShelf);
+        if (!user.isPresent()) {
+            throw new UserNotFoundException("Book-Shelf could not be created because user was not found");
         }
 
-        return null;
+        BookShelf newBookShelf = new BookShelf();
+        newBookShelf.setUser(user.get());
+        newBookShelf.setBookShelfName(username + "-" + bookShelfName);
+
+        return bookShelfRepo.save(newBookShelf);
     }
 
     @Transactional
-    public void addBooksToBookShelf(String username, String bookShelfName, Book book) {
+    public void addBooksToBookShelf(String username, String bookShelfName, Item googleBook) {
 
         String bookShelfNameQuery = username + '-' + bookShelfName;
 
-        BookShelf bookShelf = bookShelfRepo.findByBookShelfName(bookShelfNameQuery);
+        Optional<BookShelf> bookShelf = bookShelfRepo.findByBookShelfName(bookShelfNameQuery);
 
-        bookShelf.addBook(book);
+        if (!bookShelf.isPresent()) {
+            throw new BookShelfNotFoundException("Bookshelf with the name '" + bookShelfNameQuery + "' was not found.");
+        }
+
+        Book book = saveOrUpdateBook(googleBook);
+
+        bookShelf.get().addBook(book);
     }
 }

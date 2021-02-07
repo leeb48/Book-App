@@ -1,10 +1,7 @@
 package com.project.bookapp.exceptions;
 
 import com.project.bookapp.exceptions.controllerExceptions.EmptySearchTermException;
-import com.project.bookapp.exceptions.entityexceptions.DuplicateUsernameException;
-import com.project.bookapp.exceptions.entityexceptions.DuplicateUsernameResponse;
-import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
-import com.project.bookapp.exceptions.entityexceptions.UserNotFoundResponse;
+import com.project.bookapp.exceptions.entityexceptions.*;
 import com.project.bookapp.exceptions.oauth2exceptions.Oauth2AuthenticationException;
 import com.project.bookapp.exceptions.response.ExceptionMessageResponse;
 import com.project.bookapp.exceptions.securityexceptions.AuthenticationException;
@@ -71,5 +68,12 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<Object> BookSearchNotFoundExceptionHandler(BookShelfNotFoundException ex,
+                                                                           WebRequest request) {
+        ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
+
+        return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
+    }
 
 }

@@ -4,8 +4,10 @@ import com.project.bookapp.domain.BookShelf;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface BookShelfRepo extends CrudRepository<BookShelf, Long> {
 
-    BookShelf findByBookShelfName(String name);
+    Optional<BookShelf> findByBookShelfName(String name);
 }

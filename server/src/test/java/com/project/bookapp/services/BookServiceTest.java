@@ -1,13 +1,15 @@
 package com.project.bookapp.services;
 
 import com.project.bookapp.domain.Book;
-import com.project.bookapp.domain.BookShelf;
+import com.project.bookapp.domain.Bookshelf;
 import com.project.bookapp.domain.User;
 import com.project.bookapp.domain.googlebooks.Item;
 import com.project.bookapp.domain.googlebooks.VolumeInfo;
+import com.project.bookapp.exceptions.entityexceptions.DuplicateBookShelfNameException;
+import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import com.project.bookapp.repositories.BookRepo;
-import com.project.bookapp.repositories.BookShelfRepo;
-import com.project.bookapp.repositories.UserRepo;
+import com.project.bookapp.repositories.BookshelfRepo;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,18 +27,19 @@ class BookServiceTest {
 
     BookService bookService;
 
+
     @Mock
-    UserRepo userRepo;
+    UserService userService;
 
     @Mock
     BookRepo bookRepo;
 
     @Mock
-    BookShelfRepo bookShelfRepo;
+    BookshelfRepo bookshelfRepo;
 
     @BeforeEach
     void setUp() {
-        bookService = new BookService(userRepo, bookRepo, bookShelfRepo);
+        bookService = new BookService(userService, bookRepo, bookshelfRepo);
     }
 
     @Test
@@ -61,26 +64,63 @@ class BookServiceTest {
     }
 
     @Test
-    public void createBookShelf() {
+    public void createBookShelf() throws Exception {
         // given
         User user = new User();
         user.setId(1L);
         user.setUsername("user1");
 
-        when(userRepo.findByUsername(anyString())).thenReturn(Optional.of(user));
-        when(bookShelfRepo.save(any(BookShelf.class))).thenReturn(new BookShelf());
+        when(userService.findUserByUsername(anyString())).thenReturn(user);
+        when(bookshelfRepo.save(any(Bookshelf.class))).thenReturn(new Bookshelf());
 
         // when
-        BookShelf newBookShelf = bookService.createBookShelf(user.getUsername(), "newBookShelf");
+        Bookshelf newBookshelf = bookService.createBookShelf(user.getUsername(), "newBookShelf");
 
         // then
-        verify(userRepo, times(1)).findByUsername(anyString());
-        verify(bookShelfRepo, times(1)).save(any(BookShelf.class));
+        verify(userService, times(1)).findUserByUsername(anyString());
+        verify(bookshelfRepo, times(1)).save(any(Bookshelf.class));
 
     }
 
     @Test
-    public void addBooksToBookShelf() {
+    public void createBookShelfWithNoUser() {
+
+        // given
+        when(userService.findUserByUsername(anyString())).thenThrow(new UserNotFoundException("User not found"));
+        String username = "user";
+        String bookShelfName = "bookShelf";
+
+        // when
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            bookService.createBookShelf(username, bookShelfName);
+        });
+
+        // then
+        verify(userService, times(1)).findUserByUsername(anyString());
+    }
+
+    @Test
+    public void createBookShelfDuplicateName() {
+
+        // given
+        when(userService.findUserByUsername(anyString())).thenReturn(new User());
+        when(bookshelfRepo.existsBookShelfByBookshelfIdentifier(anyString())).thenReturn(true);
+        String username = "user";
+        String bookShelfName = "bookShelf";
+
+        // when
+        Assertions.assertThrows(DuplicateBookShelfNameException.class, () -> {
+            bookService.createBookShelf(username, bookShelfName);
+        });
+
+        // then
+        verify(userService, times(1)).findUserByUsername(anyString());
+        verify(bookshelfRepo, times(1)).existsBookShelfByBookshelfIdentifier(anyString());
+    }
+
+
+    @Test
+    public void addBooksToBookshelf() {
         // given
         String username = "user1";
         String bookShelfName = "bookshelf1";
@@ -88,17 +128,17 @@ class BookServiceTest {
         bookItem.id = "abcd";
         bookItem.volumeInfo = new VolumeInfo();
 
-        BookShelf bookShelf = new BookShelf();
+        Bookshelf bookShelf = new Bookshelf();
 
-        when(bookShelfRepo.findByBookShelfName(anyString())).thenReturn(Optional.of(bookShelf));
+        when(bookshelfRepo.findBybookshelfIdentifier(anyString())).thenReturn(Optional.of(bookShelf));
         when(bookRepo.findByGoogleBooksId(anyString())).thenReturn(Optional.of(new Book()));
         when(bookRepo.save(any(Book.class))).thenReturn(new Book());
 
         // when
-        bookService.addBooksToBookShelf(username, bookShelfName, bookItem);
+        bookService.addBookToBookshelf(username, bookShelfName, bookItem);
 
         // then
-        verify(bookShelfRepo, times(1)).findByBookShelfName(anyString());
+        verify(bookshelfRepo, times(1)).findBybookshelfIdentifier(anyString());
         verify(bookRepo, times(1)).findByGoogleBooksId(anyString());
         verify(bookRepo, times(1)).save(any(Book.class));
 

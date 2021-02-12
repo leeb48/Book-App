@@ -28,12 +28,13 @@ public class Book extends BaseEntity {
     private List<String> authors;
     private String publisher;
     private String publishedDate;
+    @Lob
     private String description;
     @Convert(converter = CategoriesConverter.class)
     private List<String> categories;
     private String maturityRating;
     @Convert(converter = ImageLinksConverter.class)
-    @Column(columnDefinition = "LONGTEXT")
+    @Lob
     private ImageLinks imageLinks;
 
     public Book(Item googleBookItem) {

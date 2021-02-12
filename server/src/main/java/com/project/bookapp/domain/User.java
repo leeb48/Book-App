@@ -38,9 +38,11 @@ public class User extends BaseEntity implements UserDetails {
     private String providerId;
 
     @JsonIgnore
+    @ToString.Exclude
     private String password;
 
     @JsonIgnore
+    @ToString.Exclude
     private String refreshToken;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -52,7 +54,7 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
-    private Set<BookShelf> bookShelves = new HashSet<>();
+    private Set<Bookshelf> bookShelves = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {

@@ -1,28 +1,29 @@
 package com.project.bookapp.services;
 
 import com.project.bookapp.domain.Book;
-import com.project.bookapp.domain.BookShelf;
+import com.project.bookapp.domain.Bookshelf;
 import com.project.bookapp.domain.User;
 import com.project.bookapp.domain.googlebooks.Item;
 import com.project.bookapp.exceptions.entityexceptions.BookShelfNotFoundException;
-import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
+import com.project.bookapp.exceptions.entityexceptions.DuplicateBookShelfNameException;
 import com.project.bookapp.repositories.BookRepo;
-import com.project.bookapp.repositories.BookShelfRepo;
-import com.project.bookapp.repositories.UserRepo;
+import com.project.bookapp.repositories.BookshelfRepo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class BookService {
 
-    private final UserRepo userRepo;
+    private final UserService userService;
     private final BookRepo bookRepo;
-    private final BookShelfRepo bookShelfRepo;
+    private final BookshelfRepo bookShelfRepo;
 
-    public BookService(UserRepo userRepo, BookRepo bookRepo, BookShelfRepo bookShelfRepo) {
-        this.userRepo = userRepo;
+    public BookService(UserService userService, BookRepo bookRepo, BookshelfRepo bookShelfRepo) {
+        this.userService = userService;
         this.bookRepo = bookRepo;
         this.bookShelfRepo = bookShelfRepo;
     }
@@ -39,33 +40,55 @@ public class BookService {
         return bookRepo.save(googleBook);
     }
 
-    public BookShelf createBookShelf(String username, String bookShelfName) {
-        Optional<User> user = userRepo.findByUsername(username);
+    public Bookshelf createBookShelf(String username, String bookshelfName) throws Exception {
+        User user = userService.findUserByUsername(username);
 
-        if (!user.isPresent()) {
-            throw new UserNotFoundException("Book-Shelf could not be created because user was not found");
+        String bookshelfIdentifier = username + "-" + bookshelfName;
+
+        if (bookShelfRepo.existsBookShelfByBookshelfIdentifier(bookshelfIdentifier)) {
+            throw new DuplicateBookShelfNameException("BookShelf name of '" + bookshelfName + "' already taken");
         }
 
-        BookShelf newBookShelf = new BookShelf();
-        newBookShelf.setUser(user.get());
-        newBookShelf.setBookShelfName(username + "-" + bookShelfName);
+        Bookshelf newBookshelf = new Bookshelf();
+        newBookshelf.setUser(user);
+        newBookshelf.setBookshelfIdentifier(bookshelfIdentifier);
+        newBookshelf.setBookshelfName(bookshelfName);
 
-        return bookShelfRepo.save(newBookShelf);
+        return bookShelfRepo.save(newBookshelf);
+    }
+
+    public List<Bookshelf> getUsersBookShelves(String username) {
+        User user = userService.findUserByUsername(username);
+
+        return bookShelfRepo.findBookshelvesByUser(user);
+    }
+
+    public Set<Book> retrieveBooksFromBookshelf(String bookShelfName, String username) {
+
+        String bookShelfIdentifier = username + "-" + bookShelfName;
+
+        Optional<Bookshelf> bookShelf = bookShelfRepo.findBybookshelfIdentifier(bookShelfIdentifier);
+
+        return bookShelf.map(Bookshelf::getBooks).orElse(null);
+
     }
 
     @Transactional
-    public void addBooksToBookShelf(String username, String bookShelfName, Item googleBook) {
+    public void addBookToBookshelf(String username, String bookShelfName, Item googleBook) {
 
-        String bookShelfNameQuery = username + '-' + bookShelfName;
 
-        Optional<BookShelf> bookShelf = bookShelfRepo.findByBookShelfName(bookShelfNameQuery);
+        String bookShelfIdentifier = username + '-' + bookShelfName;
+
+        Optional<Bookshelf> bookShelf = bookShelfRepo.findBybookshelfIdentifier(bookShelfIdentifier);
 
         if (!bookShelf.isPresent()) {
-            throw new BookShelfNotFoundException("Bookshelf with the name '" + bookShelfNameQuery + "' was not found.");
+            throw new BookShelfNotFoundException("Bookshelf with the name '" + bookShelfName + "' was not found.");
         }
 
         Book book = saveOrUpdateBook(googleBook);
 
         bookShelf.get().addBook(book);
     }
+
+
 }

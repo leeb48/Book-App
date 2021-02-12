@@ -35,7 +35,6 @@ public class IndustryIdentifierConverter implements AttributeConverter<List<Indu
     public List<IndustryIdentifier> convertToEntityAttribute(String s) {
         List industryIdentifiers = null;
         try {
-            System.out.println(s);
             industryIdentifiers = objectMapper.readValue(s, List.class);
         } catch (JsonMappingException e) {
             e.printStackTrace();

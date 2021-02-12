@@ -4,6 +4,7 @@ import com.project.bookapp.exceptions.controllerExceptions.EmptySearchTermExcept
 import com.project.bookapp.exceptions.entityexceptions.*;
 import com.project.bookapp.exceptions.oauth2exceptions.Oauth2AuthenticationException;
 import com.project.bookapp.exceptions.response.ExceptionMessageResponse;
+import com.project.bookapp.exceptions.response.UserNotFoundResponse;
 import com.project.bookapp.exceptions.securityexceptions.AuthenticationException;
 import com.project.bookapp.exceptions.securityexceptions.RefreshTokenMismatchException;
 import org.springframework.http.HttpStatus;
@@ -76,4 +77,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public final ResponseEntity<Object> DuplicateBookShelfNameExceptionHandler(DuplicateBookShelfNameException ex,
+                                                                               WebRequest request) {
+        ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
+
+        return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
+    }
 }

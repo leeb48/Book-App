@@ -12,13 +12,12 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "utils/useForm";
-import { RegisterUserDto } from "api/authApi";
 import { useAppDispatch } from "app/store";
-import { registerUser } from "features/userAuth/userSlice";
 import { shallowEqual, useSelector } from "react-redux";
 import { RootState } from "app/rootReducer";
 import { clearInputErrors } from "features/alerts/alertsSlice";
 import LoginLink from "./LoginLink";
+import { registerUser, RegisterUserDto } from "features/userAuth";
 
 function Copyright() {
   return (

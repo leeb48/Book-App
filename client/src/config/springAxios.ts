@@ -1,6 +1,6 @@
 import { EnhancedStore } from "@reduxjs/toolkit";
-import { refreshTokenApi, RefreshTokenDto } from "api/authApi";
 import axios from "axios";
+import { RefreshTokenDto, RefreshTokenResponseDto } from "features/userAuth";
 import { refreshTokenSuccess } from "features/userAuth/userSlice";
 
 export const springAxios = axios.create({
@@ -67,10 +67,13 @@ export const refreshTokenInterceptor = (store: EnhancedStore) => {
         };
 
         try {
-          const res = await refreshTokenApi(data);
+          const res = await refreshAxios.post<RefreshTokenResponseDto>(
+            "/auth/refresh",
+            data
+          );
 
-          localStorage.setItem("jwt", res.jwt);
-          localStorage.setItem("refreshToken", res.refreshToken);
+          localStorage.setItem("jwt", res.data.jwt);
+          localStorage.setItem("refreshToken", res.data.refreshToken);
           store.dispatch(refreshTokenSuccess());
         } catch (error) {
           localStorage.removeItem("jwt");

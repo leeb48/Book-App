@@ -9,12 +9,12 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useAppDispatch } from "app/store";
-import { searchBooks, SearchInfo } from "features/bookSearch/bookSearchSlice";
 import React from "react";
 import { useForm } from "utils/useForm";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
-// TODO: implement detailed search page
+import { searchBooks, SearchInfo } from "features/bookSearch";
+import { shallowEqual, useSelector } from "react-redux";
+import { RootState } from "app/rootReducer";
 
 const useStyles = makeStyles({
   root: {
@@ -40,6 +40,12 @@ const useStyles = makeStyles({
 const BookSearchBar = () => {
   const classes = useStyles();
 
+  const { inputErrors } = useSelector((state: RootState) => {
+    return {
+      inputErrors: state.alerts.inputErrors,
+    };
+  }, shallowEqual);
+
   const { values, onChange } = useForm<SearchInfo>({
     generalSearch: "",
     title: "",
@@ -58,7 +64,8 @@ const BookSearchBar = () => {
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    dispatch(searchBooks(values));
+    // remove hyphens from isbn
+    dispatch(searchBooks({ ...values, isbn: values.isbn.replace(/-/g, "") }));
   };
 
   return (
@@ -66,7 +73,9 @@ const BookSearchBar = () => {
       <form className={classes.form} onSubmit={onSubmit}>
         <Grid container justify="flex-end" alignItems="flex-end">
           <TextField
-            id="standard-search"
+            error={inputErrors.emptySearchTerm ? true : false}
+            helperText={inputErrors.emptySearchTerm}
+            id="general-search"
             name="generalSearch"
             value={generalSearch}
             onChange={onChange}

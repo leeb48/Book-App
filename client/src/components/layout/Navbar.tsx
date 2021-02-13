@@ -83,7 +83,7 @@ const Navbar = () => {
           noWrap
           className={classes.toolbarTitle}
         >
-          Company name
+          Book App
         </Typography>
         <nav>
           <RouterLink
@@ -95,20 +95,20 @@ const Navbar = () => {
             Home
           </RouterLink>
           <RouterLink
-            to="/enterprice"
+            to="/search"
             variant="button"
             color="textPrimary"
             className={classes.link}
           >
-            Enterprise
+            Search For Books
           </RouterLink>
           <RouterLink
-            to="/support"
+            to="/bookshelf"
             variant="button"
             color="textPrimary"
             className={classes.link}
           >
-            Support
+            My Bookshelf
           </RouterLink>
         </nav>
         {isAuthenticated ? authenticatedLinks : notAuthenticatedLinks}

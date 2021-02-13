@@ -6,9 +6,10 @@ import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
-import StarIcon from "@material-ui/icons/StarBorder";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
+import { Link as RouterLink } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
@@ -66,41 +67,36 @@ const useStyles = makeStyles((theme) => ({
 
 const tiers = [
   {
-    title: "Free",
-    price: "0",
+    title: "Join / Start Discussions",
     description: [
-      "10 users included",
-      "2 GB of storage",
-      "Help center access",
-      "Email support",
+      "Join the community to talk about books that you love or hate",
+      "Share your personal insights on books that matter to you",
     ],
-    buttonText: "Sign up for free",
+    buttonText: "Go to discussions",
     buttonVariant: "outlined",
+    buttonLink: "/discussions",
   },
   {
-    title: "Pro",
-    subheader: "Most popular",
-    price: "15",
+    title: "Search For Your Favorite Books",
     description: [
-      "20 users included",
-      "10 GB of storage",
-      "Help center access",
-      "Priority email support",
+      "Search through millions of books with Google Books API",
+      "Make detailed searches using ISBN, publisher names, and more",
+      "Check out user review scores for the books!",
     ],
-    buttonText: "Get started",
+    buttonText: "Go To Search Page",
     buttonVariant: "contained",
+    buttonLink: "/search",
   },
   {
-    title: "Enterprise",
-    price: "30",
+    title: "Create Your Custom Bookshelf",
     description: [
-      "50 users included",
-      "30 GB of storage",
-      "Help center access",
-      "Phone & email support",
+      "Create many personal bookshelves",
+      "Add all your favorite books",
+      "Share your bookshelves with other users",
     ],
-    buttonText: "Contact us",
+    buttonText: "Go to bookshelves",
     buttonVariant: "outlined",
+    buttonLink: "/bookshelf",
   },
 ];
 const footers = [
@@ -142,13 +138,13 @@ export default function Pricing() {
       {/* Hero unit */}
       <Container maxWidth="sm" component="main" className={classes.heroContent}>
         <Typography
-          component="h1"
-          variant="h2"
+          component="h3"
+          variant="h3"
           align="center"
           color="textPrimary"
           gutterBottom
         >
-          Pricing
+          Welcome to the Book App
         </Typography>
         <Typography
           variant="h5"
@@ -156,9 +152,7 @@ export default function Pricing() {
           color="textSecondary"
           component="p"
         >
-          Quickly build an effective pricing table for your potential customers
-          with this layout. It&apos;s built with default Material-UI components
-          with little customization.
+          Some descriptions about the app and how to use it.
         </Typography>
       </Container>
       {/* End hero unit */}
@@ -176,36 +170,34 @@ export default function Pricing() {
               <Card>
                 <CardHeader
                   title={tier.title}
-                  subheader={tier.subheader}
                   titleTypographyProps={{ align: "center" }}
                   subheaderTypographyProps={{ align: "center" }}
-                  action={tier.title === "Pro" ? <StarIcon /> : null}
                   className={classes.cardHeader}
                 />
                 <CardContent>
-                  <div className={classes.cardPricing}>
-                    <Typography component="h2" variant="h3" color="textPrimary">
-                      ${tier.price}
-                    </Typography>
-                    <Typography variant="h6" color="textSecondary">
-                      /mo
-                    </Typography>
-                  </div>
                   <ul>
                     {tier.description.map((line) => (
                       <Typography
                         component="li"
                         variant="subtitle1"
-                        align="center"
+                        align="left"
                         key={line}
                       >
-                        {line}
+                        {/* TODO: Align icon with text */}
+                        <ChevronRightIcon />
+                        <span>{line}</span>
                       </Typography>
                     ))}
                   </ul>
                 </CardContent>
                 <CardActions>
-                  <Button fullWidth variant="contained" color="primary">
+                  <Button
+                    component={RouterLink}
+                    to={tier.buttonLink}
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                  >
                     {tier.buttonText}
                   </Button>
                 </CardActions>

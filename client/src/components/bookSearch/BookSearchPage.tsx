@@ -2,7 +2,7 @@ import { CircularProgress, Container, Grid } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import { RootState } from "app/rootReducer";
 import { useAppDispatch } from "app/store";
-import { searchBooksPagination } from "features/bookSearch/bookSearchSlice";
+import { searchBooksPagination } from "features/bookSearch";
 import React, { useState } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import BookItem from "./BookItem";

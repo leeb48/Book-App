@@ -13,17 +13,16 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { LoginUserDto } from "api/authApi";
 import { useAppDispatch } from "app/store";
 import { shallowEqual, useSelector } from "react-redux";
 import { RootState } from "app/rootReducer";
 import { useForm } from "utils/useForm";
-import { loginUser } from "features/userAuth/userSlice";
 import { clearInputErrors } from "features/alerts/alertsSlice";
 import RegisterLink from "./RegisterLink";
 import GitHubIcon from "@material-ui/icons/GitHub";
 
 import { githubLoginUrl, googleLoginUrl } from "config/oauth2LoginUrls";
+import { loginUser, LoginUserDto } from "features/userAuth";
 
 function Copyright() {
   return (
@@ -93,8 +92,6 @@ export default function Login() {
 
     dispatch(loginUser(values));
   };
-
-  console.log(githubLoginUrl);
 
   return (
     <Container component="main" maxWidth="xs">

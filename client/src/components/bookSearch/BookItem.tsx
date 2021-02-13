@@ -49,11 +49,17 @@ const BookItem = ({ book }: Props) => {
           <br />
           Author(s): {JSON.stringify(book.volumeInfo.authors)}
           <br />
-          Description: {JSON.stringify(book.volumeInfo.description)}
+          Description:{" "}
+          {`${JSON.stringify(book.volumeInfo.description).substr(
+            0,
+            600
+          )} (cont...)`}
           <br />
           Publisher: {JSON.stringify(book.volumeInfo.publisher)}
           <br />
           ISBN: {JSON.stringify(book.volumeInfo.industryIdentifiers)}
+          <br />
+          Subject: {JSON.stringify(book.volumeInfo.categories)}
         </Grid>
       </Grid>
     </Paper>

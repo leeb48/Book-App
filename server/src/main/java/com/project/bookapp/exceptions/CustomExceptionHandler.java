@@ -1,6 +1,7 @@
 package com.project.bookapp.exceptions;
 
 import com.project.bookapp.exceptions.controllerExceptions.EmptySearchTermException;
+import com.project.bookapp.exceptions.controllerExceptions.EmptySearchTermResponse;
 import com.project.bookapp.exceptions.entityexceptions.*;
 import com.project.bookapp.exceptions.oauth2exceptions.Oauth2AuthenticationException;
 import com.project.bookapp.exceptions.response.ExceptionMessageResponse;
@@ -64,13 +65,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler
     public final ResponseEntity<Object> EmptySearchTermExceptionHandler(EmptySearchTermException ex,
                                                                         WebRequest request) {
-        ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
+        EmptySearchTermResponse exceptionRes = new EmptySearchTermResponse(ex.getMessage());
 
         return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler
-    public final ResponseEntity<Object> BookSearchNotFoundExceptionHandler(BookShelfNotFoundException ex,
+    public final ResponseEntity<Object> BookSearchNotFoundExceptionHandler(BookshelfNotFoundException ex,
                                                                            WebRequest request) {
         ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
 
@@ -78,9 +79,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler
-    public final ResponseEntity<Object> DuplicateBookShelfNameExceptionHandler(DuplicateBookShelfNameException ex,
+    public final ResponseEntity<Object> DuplicateBookShelfNameExceptionHandler(DuplicateBookshelfNameException ex,
                                                                                WebRequest request) {
-        ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
+        DuplicateBookshelfNameResponse exceptionRes = new DuplicateBookshelfNameResponse(ex.getMessage());
 
         return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
     }

@@ -5,7 +5,7 @@ import com.project.bookapp.domain.Bookshelf;
 import com.project.bookapp.domain.User;
 import com.project.bookapp.domain.googlebooks.Item;
 import com.project.bookapp.domain.googlebooks.VolumeInfo;
-import com.project.bookapp.exceptions.entityexceptions.DuplicateBookShelfNameException;
+import com.project.bookapp.exceptions.entityexceptions.DuplicateBookshelfNameException;
 import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import com.project.bookapp.repositories.BookRepo;
 import com.project.bookapp.repositories.BookshelfRepo;
@@ -109,7 +109,7 @@ class BookServiceTest {
         String bookShelfName = "bookShelf";
 
         // when
-        Assertions.assertThrows(DuplicateBookShelfNameException.class, () -> {
+        Assertions.assertThrows(DuplicateBookshelfNameException.class, () -> {
             bookService.createBookShelf(username, bookShelfName);
         });
 

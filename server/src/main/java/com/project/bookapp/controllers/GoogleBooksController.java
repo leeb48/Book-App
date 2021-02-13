@@ -74,7 +74,7 @@ public class GoogleBooksController {
         String searchModifiers = String.format("&startIndex=%s&maxResults=%s", startIndex, resultsPerPage);
 
         if (searchTerms.equals("")) {
-            throw new EmptySearchTermException("At least one search term must be provided");
+            throw new EmptySearchTermException("At least one search field must be provided");
         }
 
         return String.format("?q=%s%s", searchTerms, searchModifiers);

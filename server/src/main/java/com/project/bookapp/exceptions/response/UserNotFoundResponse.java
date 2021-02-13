@@ -1,4 +1,4 @@
-package com.project.bookapp.exceptions.entityexceptions;
+package com.project.bookapp.exceptions.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

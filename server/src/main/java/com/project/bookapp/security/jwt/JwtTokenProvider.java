@@ -1,7 +1,7 @@
 package com.project.bookapp.security.jwt;
 
-import com.project.bookapp.security.SecurityConstants;
 import com.project.bookapp.domain.User;
+import com.project.bookapp.security.SecurityConstants;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

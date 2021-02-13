@@ -1,9 +1,9 @@
 package com.project.bookapp.security.oauth2;
 
-import com.project.bookapp.services.UserService;
 import com.project.bookapp.domain.User;
 import com.project.bookapp.exceptions.oauth2exceptions.Oauth2AuthenticationException;
 import com.project.bookapp.security.jwt.JwtTokenProvider;
+import com.project.bookapp.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;

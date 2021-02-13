@@ -24,11 +24,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TokenAuthenticationTest {
 
     @Autowired
-    private MockMvc mvc;
-
-    @Autowired
     JwtTokenProvider jwtTokenProvider;
-
+    @Autowired
+    private MockMvc mvc;
     @MockBean
     private UserService userService;
 

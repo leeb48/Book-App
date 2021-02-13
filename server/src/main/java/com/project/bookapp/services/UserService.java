@@ -2,6 +2,7 @@ package com.project.bookapp.services;
 
 import com.project.bookapp.domain.User;
 import com.project.bookapp.exceptions.entityexceptions.DuplicateUsernameException;
+import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import com.project.bookapp.repositories.UserRepo;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,9 +23,16 @@ public class UserService implements UserDetailsService {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
+
     public User findUserByUsername(String username) {
 
-        return userRepo.findByUsername(username).orElse(null);
+        Optional<User> user = userRepo.findByUsername(username);
+
+        if (!user.isPresent()) {
+            throw new UserNotFoundException("User with username '" + username + "' not found.");
+        }
+       
+        return user.get();
     }
 
     public User saveUser(User user) throws Exception {

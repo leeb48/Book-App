@@ -1,9 +1,9 @@
 package com.project.bookapp.security.jwt;
 
-import com.project.bookapp.services.UserService;
 import com.project.bookapp.domain.User;
 import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import com.project.bookapp.exceptions.securityexceptions.AuthenticationException;
+import com.project.bookapp.services.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;

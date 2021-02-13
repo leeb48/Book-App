@@ -1,9 +1,9 @@
 package com.project.bookapp.controllers;
 
 import com.project.bookapp.domain.User;
+import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import com.project.bookapp.payload.authpayload.UserInfoRes;
 import com.project.bookapp.services.UserService;
-import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

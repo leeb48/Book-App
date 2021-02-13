@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,11 +14,13 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User extends BaseEntity implements UserDetails {
 
     @Email(message = "Username must be an email")
@@ -35,9 +38,11 @@ public class User extends BaseEntity implements UserDetails {
     private String providerId;
 
     @JsonIgnore
+    @ToString.Exclude
     private String password;
 
     @JsonIgnore
+    @ToString.Exclude
     private String refreshToken;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -47,6 +52,9 @@ public class User extends BaseEntity implements UserDetails {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private Set<Bookshelf> bookShelves = new HashSet<>();
 
     @PrePersist
     protected void onCreate() {

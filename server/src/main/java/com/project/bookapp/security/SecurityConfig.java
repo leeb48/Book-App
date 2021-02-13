@@ -1,12 +1,12 @@
 package com.project.bookapp.security;
 
+import com.project.bookapp.security.jwt.JwtAuthFilter;
+import com.project.bookapp.security.jwt.JwtAuthenticationEntryPoint;
+import com.project.bookapp.security.jwt.JwtTokenProvider;
 import com.project.bookapp.security.oauth2.OAuth2AuthenticationSuccessHandler;
 import com.project.bookapp.security.oauth2.Oauth2AuthenticationFailureHandler;
 import com.project.bookapp.services.CustomOauth2UserService;
 import com.project.bookapp.services.UserService;
-import com.project.bookapp.security.jwt.JwtAuthFilter;
-import com.project.bookapp.security.jwt.JwtAuthenticationEntryPoint;
-import com.project.bookapp.security.jwt.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -98,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(SIGN_UP_URLS).permitAll()
                 .antMatchers(OAUTH2_URLS, "/api/test").permitAll()
                 // TODO: remove after developing book resource routes
-                .antMatchers("/api/books/*").permitAll()
+                .antMatchers("/api/books/*", "/api/search").permitAll()
                 .anyRequest().authenticated()
                 .and()
 

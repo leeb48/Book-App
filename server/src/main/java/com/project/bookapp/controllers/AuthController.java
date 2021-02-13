@@ -2,6 +2,7 @@ package com.project.bookapp.controllers;
 
 import com.project.bookapp.domain.AuthProvider;
 import com.project.bookapp.domain.User;
+import com.project.bookapp.exceptions.securityexceptions.RefreshTokenMismatchException;
 import com.project.bookapp.payload.authpayload.JwtLoginSuccessRes;
 import com.project.bookapp.payload.authpayload.LoginRequest;
 import com.project.bookapp.payload.authpayload.RefreshTokenRequest;
@@ -9,8 +10,6 @@ import com.project.bookapp.payload.authpayload.RegisterUserRequest;
 import com.project.bookapp.security.jwt.JwtTokenProvider;
 import com.project.bookapp.services.UserService;
 import com.project.bookapp.services.ValidationService;
-import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
-import com.project.bookapp.exceptions.securityexceptions.RefreshTokenMismatchException;
 import com.project.bookapp.validators.UserValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -119,9 +118,6 @@ public class AuthController {
         // find the user and compare the passed in refresh token to the one stored in the DB
         User user = userService.findUserByUsername(username);
 
-        if (user == null) {
-            throw new UserNotFoundException("User with username '" + username + "' not found");
-        }
 
         if (!user.getRefreshToken().equals(refreshTokenRequest.getRefreshToken()) ||
                 !jwtTokenProvider.validateToken(refreshTokenRequest.getRefreshToken())) {

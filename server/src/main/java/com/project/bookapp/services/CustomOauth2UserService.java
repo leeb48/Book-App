@@ -34,6 +34,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) {
 
+
         OAuth2UserInfo oAuth2UserInfo = Oauth2UserInfoFactory
                 .getOauth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(),
                         oAuth2User.getAttributes());
@@ -54,6 +55,7 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
                         user.getAuthProvider() + " account. Please use your " +
                         user.getAuthProvider() + " account to login.");
             }
+
 
             userRepo.save(user);
         } else {

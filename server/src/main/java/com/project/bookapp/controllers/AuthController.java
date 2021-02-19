@@ -78,6 +78,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtLoginSuccessRes(true, jwt, refreshToken));
     }
 
+
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterUserRequest user,
                                       BindingResult result) throws Exception {

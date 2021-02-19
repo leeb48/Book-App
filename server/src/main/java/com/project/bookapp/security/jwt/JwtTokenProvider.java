@@ -1,7 +1,6 @@
 package com.project.bookapp.security.jwt;
 
 import com.project.bookapp.domain.User;
-import com.project.bookapp.security.SecurityConstants;
 import io.jsonwebtoken.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -11,6 +10,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.project.bookapp.security.SecurityConstants.*;
+
 @Component
 public class JwtTokenProvider {
 
@@ -18,7 +19,7 @@ public class JwtTokenProvider {
     public String generateToken(User user) {
 
         Date now = new Date(System.currentTimeMillis());
-        Date expireDate = new Date(now.getTime() + SecurityConstants.JWT_EXPIRATION_TIME);
+        Date expireDate = new Date(now.getTime() + JWT_EXPIRATION_TIME);
 
         String userId = Long.toString(user.getId());
 
@@ -35,19 +36,19 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET)
+                .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
     }
 
     // generate refresh token
     public String generateRefreshToken() {
         Date now = new Date(System.currentTimeMillis());
-        Date expireDate = new Date(now.getTime() + SecurityConstants.REFRESH_TOKEN_EXPIRATION_TIME);
+        Date expireDate = new Date(now.getTime() + REFRESH_TOKEN_EXPIRATION_TIME);
 
         return Jwts.builder()
                 .setIssuedAt(now)
                 .setExpiration(expireDate)
-                .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET)
+                .signWith(SignatureAlgorithm.HS512, SECRET)
                 .compact();
     }
 
@@ -55,7 +56,7 @@ public class JwtTokenProvider {
     public boolean validateToken(String token) {
 
         try {
-            Jwts.parser().setSigningKey(SecurityConstants.SECRET).parseClaimsJws(token);
+            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
 
             return true;
         } catch (SignatureException ex) {
@@ -75,7 +76,7 @@ public class JwtTokenProvider {
 
 
     public Long getUserIdFromJwt(String token) {
-        Claims claims = Jwts.parser().setSigningKey(SecurityConstants.SECRET).parseClaimsJws(token).getBody();
+        Claims claims = Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
 
         String id = (String) claims.get("id");
 
@@ -86,7 +87,7 @@ public class JwtTokenProvider {
 
         try {
 
-            Jwts.parser().setSigningKey(SecurityConstants.SECRET).parseClaimsJws(token).getBody();
+            Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token).getBody();
         } catch (SignatureException ex) {
             System.out.println("Invalid JWT Signature");
         } catch (MalformedJwtException ex) {
@@ -107,9 +108,9 @@ public class JwtTokenProvider {
 
     // retrieves the jwt from the header
     public String getJwtFromReqHeader(HttpServletRequest req) {
-        String bearerToken = req.getHeader(SecurityConstants.HEADER_STRING);
+        String bearerToken = req.getHeader(HEADER_STRING);
 
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(SecurityConstants.TOKEN_PREFIX)) {
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
             return bearerToken.substring(7);
         }
 

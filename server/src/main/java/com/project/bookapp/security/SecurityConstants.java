@@ -10,7 +10,7 @@ public class SecurityConstants {
     public static final String HEADER_STRING = "Authorization";
     // TODO: lower the expiration time
     public static final long JWT_EXPIRATION_TIME = 300_000_000;
-    public static final int TOKEN_COOKIE_EXPIRE_TIME = 10;
+    public static final int TOKEN_COOKIE_EXPIRE_TIME = 1;
     public static final long REFRESH_TOKEN_EXPIRATION_TIME = TimeUnit.DAYS.toMillis(3);
 
     public static final String OAUTH2_SUCCESS_REDIRECT_URL = System.getenv("OAUTH2_SUCCESS_REDIRECT_URL");

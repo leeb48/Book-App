@@ -3,6 +3,7 @@ import { springAxios } from "config/springAxios";
 import {
   clearInputErrors,
   InputErrors,
+  setAlert,
   setInputErrors,
 } from "features/alerts/alertsSlice";
 import { BookSearchResponse } from "interfaces/bookSearchResponse.interface";
@@ -31,6 +32,12 @@ export const searchBooks = (data: SearchInfo): AppThunk => async (dispatch) => {
     dispatch(searchLoading(false));
     if (error.response) {
       dispatch(setInputErrors(error.response.data as InputErrors));
+      dispatch(
+        setAlert({
+          alertType: "error",
+          message: "Search Failed",
+        })
+      );
     }
   }
 };

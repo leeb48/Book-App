@@ -15,6 +15,9 @@ import Register from "../components/auth/Register";
 import Landing from "../components/layout/Landing";
 import Bookshelf from "components/bookshelf/Bookshelf";
 import { loadUser } from "features/userAuth";
+import BookshelfViewBooks from "components/bookshelf/BookshelfViewBooks";
+import { getUsersBookshelves } from "features/bookshelf";
+import Alerts from "components/layout/Alerts";
 
 const jwt = loadJwt();
 
@@ -25,11 +28,13 @@ function App() {
     if (jwt) {
       dispatch(loadUser());
     }
+    dispatch(getUsersBookshelves());
   }, [dispatch]);
 
   return (
     <Router>
       <Navbar />
+      <Alerts />
       <Switch>
         <Route exact path="/" component={Landing} />
         <Route exact path="/login" component={Login} />
@@ -37,6 +42,11 @@ function App() {
         <Route exact path="/oauth2/login-error" component={Oauth2LoginError} />
         <Route exact path="/search" component={BookSearchPage} />
         <Route exact path="/bookshelf" component={Bookshelf} />
+        <Route
+          exact
+          path="/bookshelf/:bookshelfName"
+          component={BookshelfViewBooks}
+        />
       </Switch>
     </Router>
   );

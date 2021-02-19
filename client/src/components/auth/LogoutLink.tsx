@@ -1,5 +1,5 @@
 import { useAppDispatch } from "app/store";
-import { logoutSuccess } from "features/userAuth/userSlice";
+import { logoutUser } from "features/userAuth";
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 
@@ -7,7 +7,7 @@ const LogoutLink: React.FunctionComponent = ({ children }) => {
   const dispatch = useAppDispatch();
 
   const onClick = () => {
-    dispatch(logoutSuccess());
+    dispatch(logoutUser());
   };
 
   return (

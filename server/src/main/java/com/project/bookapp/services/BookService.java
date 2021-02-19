@@ -4,8 +4,8 @@ import com.project.bookapp.domain.Book;
 import com.project.bookapp.domain.Bookshelf;
 import com.project.bookapp.domain.User;
 import com.project.bookapp.domain.googlebooks.Item;
-import com.project.bookapp.exceptions.entityexceptions.BookShelfNotFoundException;
-import com.project.bookapp.exceptions.entityexceptions.DuplicateBookShelfNameException;
+import com.project.bookapp.exceptions.entityexceptions.BookshelfNotFoundException;
+import com.project.bookapp.exceptions.entityexceptions.DuplicateBookshelfNameException;
 import com.project.bookapp.repositories.BookRepo;
 import com.project.bookapp.repositories.BookshelfRepo;
 import org.springframework.stereotype.Service;
@@ -46,7 +46,7 @@ public class BookService {
         String bookshelfIdentifier = username + "-" + bookshelfName;
 
         if (bookShelfRepo.existsBookShelfByBookshelfIdentifier(bookshelfIdentifier)) {
-            throw new DuplicateBookShelfNameException("BookShelf name of '" + bookshelfName + "' already taken");
+            throw new DuplicateBookshelfNameException("BookShelf name of '" + bookshelfName + "' already taken");
         }
 
         Bookshelf newBookshelf = new Bookshelf();
@@ -76,13 +76,12 @@ public class BookService {
     @Transactional
     public void addBookToBookshelf(String username, String bookShelfName, Item googleBook) {
 
-
         String bookShelfIdentifier = username + '-' + bookShelfName;
 
         Optional<Bookshelf> bookShelf = bookShelfRepo.findBybookshelfIdentifier(bookShelfIdentifier);
 
         if (!bookShelf.isPresent()) {
-            throw new BookShelfNotFoundException("Bookshelf with the name '" + bookShelfName + "' was not found.");
+            throw new BookshelfNotFoundException("Bookshelf with the name '" + bookShelfName + "' was not found.");
         }
 
         Book book = saveOrUpdateBook(googleBook);

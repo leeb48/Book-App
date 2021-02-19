@@ -22,7 +22,6 @@ public class Bookshelf extends BaseEntity {
             joinColumns = @JoinColumn(name = "bookshelf_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
-    @JsonIgnore
     @ToString.Exclude
     Set<Book> books = new HashSet<>();
 

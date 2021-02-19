@@ -52,8 +52,9 @@ public class User extends BaseEntity implements UserDetails {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @ToString.Exclude
+    @JsonIgnore
     private Set<Bookshelf> bookShelves = new HashSet<>();
 
     @PrePersist

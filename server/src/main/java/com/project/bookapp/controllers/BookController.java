@@ -6,6 +6,7 @@ import com.project.bookapp.domain.googlebooks.Item;
 import com.project.bookapp.payload.bookspayload.AddBooksToBookshelfRequest;
 import com.project.bookapp.payload.bookspayload.BookAddedResponse;
 import com.project.bookapp.payload.bookspayload.CreateBookshelfRequest;
+import com.project.bookapp.payload.bookspayload.RemoveBookFromBookshelfRequest;
 import com.project.bookapp.services.BookService;
 import com.project.bookapp.services.ValidationService;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping(BookController.BASE_URL)
@@ -47,6 +47,16 @@ public class BookController {
         return new ResponseEntity<>(newBookshelf, HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/remove/{bookshelfName}")
+    public ResponseEntity<?> removeBookshelf(@PathVariable String bookshelfName, Principal principal) {
+
+        String username = principal.getName();
+        bookService.removeBookshelf(username, bookshelfName);
+
+        return ResponseEntity.ok(bookshelfName + " removed.");
+    }
+
+
     @PostMapping("/add-book-to-bookshelf")
     public ResponseEntity<?> addBookToBookshelf(@Valid @RequestBody AddBooksToBookshelfRequest request,
                                                 BindingResult result,
@@ -58,15 +68,35 @@ public class BookController {
 
         String bookshelfName = request.getBookshelfName();
         String username = principal.getName();
-        Item bookItem = request.getBookItem();
+        Item bookItem = request.getBook();
 
-        bookService.addBookToBookshelf(username, bookshelfName, bookItem);
+        Book addedBook = bookService.addBookToBookshelf(username, bookshelfName, bookItem);
 
         // send helpful message to the frontend
         String responseMessage = bookItem.volumeInfo.title + " added to " + bookshelfName + ".";
-        BookAddedResponse response = new BookAddedResponse(responseMessage);
+        BookAddedResponse response = new BookAddedResponse(responseMessage, addedBook);
+
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/remove-book-from-bookshelf")
+    public ResponseEntity<?> removeBookFromBookshelf(@Valid @RequestBody RemoveBookFromBookshelfRequest request,
+                                                     BindingResult result, Principal principal) {
+
+        if (result.hasErrors()) {
+            return validationService.createErrorResponse(result);
+        }
+
+        String bookshelfName = request.getBookshelfName();
+        String username = principal.getName();
+        Book bookItem = request.getBook();
+
+        bookService.removeBookFromBookshelf(username, bookshelfName, bookItem);
+
+        String responseMessage = bookItem.getTitle() + " removed from " + bookshelfName + ".";
+
+        return new ResponseEntity<>(responseMessage, HttpStatus.OK);
     }
 
     @GetMapping("/get-bookshelves")
@@ -74,16 +104,20 @@ public class BookController {
 
         String username = principal.getName();
 
+
         List<Bookshelf> bookshelves = bookService.getUsersBookShelves(username);
 
         return new ResponseEntity<>(bookshelves, HttpStatus.OK);
     }
 
     @GetMapping("/{bookshelfName}")
-    public ResponseEntity<?> retrieveBooksFromBookshelf(@PathVariable String bookshelfName, Principal principal) {
+    public ResponseEntity<?> getBookshelf(@PathVariable String bookshelfName, Principal principal) {
 
-        Set<Book> books = bookService.retrieveBooksFromBookshelf(bookshelfName, principal.getName());
 
-        return new ResponseEntity<>(books, HttpStatus.OK);
+        String username = principal.getName();
+
+        Bookshelf bookshelf = bookService.getBookshelf(username, bookshelfName);
+
+        return new ResponseEntity<>(bookshelf, HttpStatus.OK);
     }
 }

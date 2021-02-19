@@ -14,5 +14,5 @@ public class AddBooksToBookshelfRequest {
     private String bookshelfName;
 
     @NotNull
-    private Item bookItem;
+    private Item book;
 }

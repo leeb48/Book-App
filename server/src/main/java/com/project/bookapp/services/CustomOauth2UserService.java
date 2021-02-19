@@ -56,7 +56,6 @@ public class CustomOauth2UserService extends DefaultOAuth2UserService {
             }
 
             userRepo.save(user);
-
         } else {
             user = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
         }

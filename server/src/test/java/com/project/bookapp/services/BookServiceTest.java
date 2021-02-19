@@ -7,6 +7,7 @@ import com.project.bookapp.domain.googlebooks.Item;
 import com.project.bookapp.domain.googlebooks.VolumeInfo;
 import com.project.bookapp.exceptions.entityexceptions.DuplicateBookshelfNameException;
 import com.project.bookapp.exceptions.entityexceptions.UserNotFoundException;
+import com.project.bookapp.exceptions.securityexceptions.NotAuthorizedException;
 import com.project.bookapp.repositories.BookRepo;
 import com.project.bookapp.repositories.BookshelfRepo;
 import org.junit.jupiter.api.Assertions;
@@ -143,7 +144,30 @@ class BookServiceTest {
         verify(bookRepo, times(1)).save(any(Book.class));
 
         assertEquals((long) bookShelf.getBooks().size(), 1);
+    }
 
+    @Test
+    public void removeBookshelfUnauthorized() {
+
+        // given
+        User user1 = new User();
+        user1.setId(1L);
+        User user2 = new User();
+        user2.setId(2L);
+
+        Bookshelf bookshelf = new Bookshelf();
+        bookshelf.setUser(user1);
+
+        when(userService.findUserByUsername(anyString())).thenReturn(user2);
+        when(bookshelfRepo.findBybookshelfIdentifier(anyString())).thenReturn(Optional.of(bookshelf));
+
+        // when
+        Assertions.assertThrows(NotAuthorizedException.class, () -> {
+            bookService.removeBookshelf("user1", "bookshelf1");
+        });
+
+        verify(userService, times(1)).findUserByUsername(anyString());
+        verify(bookshelfRepo, times(1)).findBybookshelfIdentifier(anyString());
     }
 
 

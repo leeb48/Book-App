@@ -7,6 +7,7 @@ import com.project.bookapp.exceptions.oauth2exceptions.Oauth2AuthenticationExcep
 import com.project.bookapp.exceptions.response.ExceptionMessageResponse;
 import com.project.bookapp.exceptions.response.UserNotFoundResponse;
 import com.project.bookapp.exceptions.securityexceptions.AuthenticationException;
+import com.project.bookapp.exceptions.securityexceptions.NotAuthorizedException;
 import com.project.bookapp.exceptions.securityexceptions.RefreshTokenMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -84,5 +85,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         DuplicateBookshelfNameResponse exceptionRes = new DuplicateBookshelfNameResponse(ex.getMessage());
 
         return new ResponseEntity<>(exceptionRes, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> NotAuthorizedExceptionsHandler(NotAuthorizedException ex,
+                                                                       WebRequest request) {
+        ExceptionMessageResponse exceptionRes = new ExceptionMessageResponse(ex.getMessage());
+
+        return new ResponseEntity<>(exceptionRes, HttpStatus.UNAUTHORIZED);
     }
 }

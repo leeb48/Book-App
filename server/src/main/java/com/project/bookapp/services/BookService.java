@@ -6,6 +6,7 @@ import com.project.bookapp.domain.User;
 import com.project.bookapp.domain.googlebooks.Item;
 import com.project.bookapp.exceptions.entityexceptions.BookshelfNotFoundException;
 import com.project.bookapp.exceptions.entityexceptions.DuplicateBookshelfNameException;
+import com.project.bookapp.exceptions.securityexceptions.NotAuthorizedException;
 import com.project.bookapp.repositories.BookRepo;
 import com.project.bookapp.repositories.BookshelfRepo;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class BookService {
@@ -63,31 +63,56 @@ public class BookService {
         return bookShelfRepo.findBookshelvesByUser(user);
     }
 
-    public Set<Book> retrieveBooksFromBookshelf(String bookShelfName, String username) {
+    public Bookshelf getBookshelf(String username, String bookshelfName) {
 
-        String bookShelfIdentifier = username + "-" + bookShelfName;
+        String bookshelfIdentifier = username + "-" + bookshelfName;
 
-        Optional<Bookshelf> bookShelf = bookShelfRepo.findBybookshelfIdentifier(bookShelfIdentifier);
+        Optional<Bookshelf> bookshelf = bookShelfRepo.findBybookshelfIdentifier(bookshelfIdentifier);
 
-        return bookShelf.map(Bookshelf::getBooks).orElse(null);
+        if (!bookshelf.isPresent()) {
+            throw new BookshelfNotFoundException("Bookshelf with the name '" + bookshelfName + "' was not found.");
+        }
 
+        return bookshelf.get();
     }
 
     @Transactional
-    public void addBookToBookshelf(String username, String bookShelfName, Item googleBook) {
+    public Book addBookToBookshelf(String username, String bookshelfName, Item googleBook) {
 
-        String bookShelfIdentifier = username + '-' + bookShelfName;
-
-        Optional<Bookshelf> bookShelf = bookShelfRepo.findBybookshelfIdentifier(bookShelfIdentifier);
-
-        if (!bookShelf.isPresent()) {
-            throw new BookshelfNotFoundException("Bookshelf with the name '" + bookShelfName + "' was not found.");
-        }
+        Bookshelf bookshelf = getBookshelf(username, bookshelfName);
 
         Book book = saveOrUpdateBook(googleBook);
 
-        bookShelf.get().addBook(book);
+        bookshelf.addBook(book);
+
+        return book;
     }
 
+    @Transactional
+    public void removeBookFromBookshelf(String username, String bookshelfName, Book book) {
+
+
+        Bookshelf bookshelf = getBookshelf(username, bookshelfName);
+        Optional<Book> bookToBeRemoved = bookRepo.findByGoogleBooksId(book.getGoogleBooksId());
+
+
+        if (!bookToBeRemoved.isPresent()) {
+            throw new BookshelfNotFoundException("Book not found");
+        }
+
+
+        bookshelf.removeBook(bookToBeRemoved.get());
+    }
+
+    public void removeBookshelf(String username, String bookshelfName) {
+        User user = userService.findUserByUsername(username);
+        Bookshelf bookshelf = getBookshelf(username, bookshelfName);
+
+        if (!user.getId().equals(bookshelf.getUser().getId())) {
+            throw new NotAuthorizedException("User is not authorized to remove the bookshelf");
+        }
+
+        bookShelfRepo.delete(bookshelf);
+    }
 
 }

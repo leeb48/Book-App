@@ -3,7 +3,6 @@ package com.project.bookapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -22,7 +21,6 @@ public class Bookshelf extends BaseEntity {
             joinColumns = @JoinColumn(name = "bookshelf_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
-    @ToString.Exclude
     Set<Book> books = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -38,5 +36,9 @@ public class Bookshelf extends BaseEntity {
 
     public void addBook(Book book) {
         books.add(book);
+    }
+
+    public void removeBook(Book book) {
+        books.remove(book);
     }
 }

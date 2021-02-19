@@ -1,10 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { Book } from "interfaces/book.interface";
-import { createBookshelfReducer } from "./bookshelfCaseReducers";
+import { ItemsEntity } from "interfaces/bookSearchResponse.interface";
+import {
+  clearBookshelfReducer,
+  createBookshelfReducer,
+  getUsersBookshelvesReducer,
+  removeBookFromBookshelfReducer,
+  setBookshelfLoadingReducer,
+  setSelectedBookshelfReducer,
+} from "./bookshelfCaseReducers";
 
 export type BookshelfState = {
   selectedBookshelf: Bookshelf | null;
   currentUsersBookshelves: Bookshelf[];
+  loading: Boolean;
 };
 
 export type Bookshelf = {
@@ -17,16 +26,41 @@ export type CreateBookshelfDto = {
   bookshelfName: string;
 };
 
+export type addBookToBookshelfDto = {
+  bookshelfName: string;
+  book: ItemsEntity;
+};
+
+export type removeBookFromBookshelfDto = {
+  bookshelfName: string | undefined;
+  book: Book;
+};
+
 const initialState: BookshelfState = {
   selectedBookshelf: null,
   currentUsersBookshelves: [],
+  loading: false,
 };
 
 const BookshelfSlice = createSlice({
   name: "bookshelf",
   initialState,
-  reducers: { createBookshelfSuccess: createBookshelfReducer },
+  reducers: {
+    createBookshelfSuccess: createBookshelfReducer,
+    getUsersBookshelfSuccess: getUsersBookshelvesReducer,
+    setBookshelfLoading: setBookshelfLoadingReducer,
+    setSelectedBookshelf: setSelectedBookshelfReducer,
+    removeBookFromBookshelfSuccess: removeBookFromBookshelfReducer,
+    clearBookshelf: clearBookshelfReducer,
+  },
 });
 
-export const { createBookshelfSuccess } = BookshelfSlice.actions;
+export const {
+  createBookshelfSuccess,
+  getUsersBookshelfSuccess,
+  setBookshelfLoading,
+  setSelectedBookshelf,
+  removeBookFromBookshelfSuccess,
+  clearBookshelf,
+} = BookshelfSlice.actions;
 export default BookshelfSlice.reducer;

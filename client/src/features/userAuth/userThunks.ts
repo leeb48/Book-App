@@ -5,6 +5,7 @@ import {
   InputErrors,
   setInputErrors,
 } from "features/alerts/alertsSlice";
+import { clearBookshelf } from "features/bookshelf";
 import {
   LoadUserInfoResponseDto,
   LoginUserDto,
@@ -15,6 +16,7 @@ import {
 import {
   loadUserInfoSuccess,
   loginUserSucess,
+  logoutSuccess,
   registerUserSuccess,
 } from "./userSlice";
 
@@ -68,4 +70,9 @@ export const loadUser = (): AppThunk => async (dispatch) => {
       console.log(error.response.data);
     }
   }
+};
+
+export const logoutUser = (): AppThunk => async (dispatch) => {
+  dispatch(logoutSuccess());
+  dispatch(clearBookshelf());
 };

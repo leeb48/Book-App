@@ -1,6 +1,7 @@
 import { Grid, makeStyles, Paper } from "@material-ui/core";
 import { ItemsEntity } from "interfaces/bookSearchResponse.interface";
 import React from "react";
+import AddToBookshelfSelector from "./AddToBookshelfSelector";
 
 const useStyles = makeStyles({
   root: {
@@ -44,22 +45,27 @@ const BookItem = ({ book }: Props) => {
           item
           xs={3}
         />
-        <Grid item xs={8}>
-          Title: {JSON.stringify(book.volumeInfo.title)}
-          <br />
-          Author(s): {JSON.stringify(book.volumeInfo.authors)}
-          <br />
-          Description:{" "}
-          {`${JSON.stringify(book.volumeInfo.description).substr(
-            0,
-            600
-          )} (cont...)`}
-          <br />
-          Publisher: {JSON.stringify(book.volumeInfo.publisher)}
-          <br />
-          ISBN: {JSON.stringify(book.volumeInfo.industryIdentifiers)}
-          <br />
-          Subject: {JSON.stringify(book.volumeInfo.categories)}
+        <Grid container item xs={8}>
+          <Grid item>
+            Title: {JSON.stringify(book.volumeInfo.title)}
+            <br />
+            Author(s): {JSON.stringify(book.volumeInfo.authors)}
+            <br />
+            Description:{" "}
+            {`${JSON.stringify(book.volumeInfo.description).substr(
+              0,
+              600
+            )} (cont...)`}
+            <br />
+            Publisher: {JSON.stringify(book.volumeInfo.publisher)}
+            <br />
+            ISBN: {JSON.stringify(book.volumeInfo.industryIdentifiers)}
+            <br />
+            Subject: {JSON.stringify(book.volumeInfo.categories)}
+          </Grid>
+          <Grid item>
+            <AddToBookshelfSelector book={book} />
+          </Grid>
         </Grid>
       </Grid>
     </Paper>

@@ -1,7 +1,11 @@
 import { createSlice, CaseReducer, PayloadAction } from "@reduxjs/toolkit";
+import { AppThunk } from "app/store";
+import { v4 as uuidv4 } from "uuid";
 
-type Alerts = {
-  [type: string]: string;
+export type Alert = {
+  alertType: "success" | "info" | "warning" | "error" | undefined;
+  message: string;
+  uuid?: string;
 };
 
 export type InputErrors = {
@@ -9,7 +13,7 @@ export type InputErrors = {
 };
 
 type AlertsState = {
-  alerts: Alerts[];
+  alerts: Alert[];
   inputErrors: InputErrors;
 };
 
@@ -30,15 +34,50 @@ const clearInputErrorReducer: CaseReducer<AlertsState> = (state) => {
   state.inputErrors = {};
 };
 
+const setAlertReducer: CaseReducer<AlertsState, PayloadAction<Alert>> = (
+  state,
+  { payload }
+) => {
+  state.alerts.push(payload);
+};
+
+const removeAlertReducer: CaseReducer<AlertsState, PayloadAction<string>> = (
+  state,
+  { payload }
+) => {
+  const index = state.alerts.findIndex((alert) => alert.uuid === payload);
+  if (index !== -1) state.alerts.splice(index, 1);
+};
+
 const alertsSlice = createSlice({
   name: "alerts",
   initialState,
   reducers: {
     setInputErrors: setInputErrorsReducer,
     clearInputErrors: clearInputErrorReducer,
+    setAlertSuccess: setAlertReducer,
+    removeAlertSuccess: removeAlertReducer,
   },
 });
 
-export const { setInputErrors, clearInputErrors } = alertsSlice.actions;
+export const {
+  setInputErrors,
+  clearInputErrors,
+  setAlertSuccess,
+  removeAlertSuccess,
+} = alertsSlice.actions;
+
+// Thunk
+export const setAlert = (alert: Alert): AppThunk => async (dispatch) => {
+  const uuid = uuidv4();
+
+  alert.uuid = uuid;
+
+  dispatch(setAlertSuccess(alert));
+
+  setTimeout(() => {
+    dispatch(removeAlertSuccess(uuid));
+  }, 6000);
+};
 
 export default alertsSlice.reducer;

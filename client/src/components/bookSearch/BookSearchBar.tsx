@@ -35,6 +35,9 @@ const useStyles = makeStyles({
   searchBtn: {
     padding: ".6rem 1.2rem .6rem 1.2rem",
   },
+  generalSearchField: {
+    marginBottom: "1rem",
+  },
 });
 
 const BookSearchBar = () => {

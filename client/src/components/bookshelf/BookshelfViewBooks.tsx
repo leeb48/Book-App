@@ -1,4 +1,9 @@
-import { CircularProgress, Container, Grid } from "@material-ui/core";
+import {
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+} from "@material-ui/core";
 import { RootState } from "app/rootReducer";
 import { useAppDispatch } from "app/store";
 import { getBookshelf } from "features/bookshelf";
@@ -38,10 +43,16 @@ const BookshelfViewBooks = ({
       </Grid>
     ));
 
+  const noBooksDisplay = selectedBookshelf &&
+    selectedBookshelf.books.length === 0 && (
+      <Typography variant="h4">{bookshelfName} Empty</Typography>
+    );
+
   return (
     <Container style={{ marginTop: "2rem" }} maxWidth="lg">
       <Grid item container justify="center" spacing={3} xs={12}>
         {loading ? <CircularProgress /> : booksDisplay}
+        {noBooksDisplay}
       </Grid>
     </Container>
   );

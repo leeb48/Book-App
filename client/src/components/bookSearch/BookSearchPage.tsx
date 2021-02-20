@@ -54,18 +54,24 @@ const BookSearchPage = () => {
       <Grid container>
         <BookSearchBar />
         <Grid item container justify="center" spacing={3} xs={12}>
-          {searchLoading ? <CircularProgress /> : resultsDisplay}
+          {searchLoading ? (
+            <CircularProgress style={{ marginTop: "30%" }} />
+          ) : (
+            resultsDisplay
+          )}
         </Grid>
 
         <Grid item container justify="center">
-          <Pagination
-            page={page}
-            onChange={handleChange}
-            count={paginationCount}
-            defaultPage={1}
-            siblingCount={1}
-            boundaryCount={1}
-          />
+          {searchLoading ? null : (
+            <Pagination
+              page={page}
+              onChange={handleChange}
+              count={paginationCount}
+              defaultPage={1}
+              siblingCount={1}
+              boundaryCount={1}
+            />
+          )}
         </Grid>
       </Grid>
     </Container>

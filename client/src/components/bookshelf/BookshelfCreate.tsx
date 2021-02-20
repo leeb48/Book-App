@@ -24,35 +24,50 @@ const BookshelfCreate = () => {
     };
   }, shallowEqual);
 
-  const { values, onChange } = useForm<CreateBookshelfDto>(initialFormValues);
+  const { values, onChange, setValues } = useForm<CreateBookshelfDto>(
+    initialFormValues
+  );
 
-  const { bookshelfName } = values;
+  let { bookshelfName } = values;
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     dispatch(createBookshelf(values));
+    setValues({ bookshelfName: "" });
   };
 
   return (
     <Container maxWidth="md">
-      <Typography component="h4" variant="h4">
-        Create Bookshelf
-      </Typography>
-      <form onSubmit={onSubmit}>
-        <Grid container direction="row" alignItems="center">
-          <TextField
-            error={inputErrors.bookshelfName ? true : false}
-            helperText={inputErrors.bookshelfName}
-            name="bookshelfName"
-            value={bookshelfName}
-            onChange={onChange}
-            label="New Bookshelf Name"
-          />
-          <Button variant="outlined" type="submit">
-            Create
-          </Button>
+      <Grid container justify="space-between" style={{ marginTop: "2rem" }}>
+        <Grid item>
+          <Typography component="h4" variant="h4">
+            Create Bookshelf
+          </Typography>
         </Grid>
-      </form>
+
+        <Grid item>
+          <form onSubmit={onSubmit}>
+            <Grid container direction="row" alignItems="center">
+              <TextField
+                error={inputErrors.bookshelfName ? true : false}
+                helperText={inputErrors.bookshelfName}
+                name="bookshelfName"
+                value={bookshelfName}
+                onChange={onChange}
+                label="New Bookshelf Name"
+              />
+              <Button
+                style={{ padding: "10px 20px 10px 20px" }}
+                variant="outlined"
+                color="primary"
+                type="submit"
+              >
+                Create
+              </Button>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
     </Container>
   );
 };

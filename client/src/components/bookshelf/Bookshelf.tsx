@@ -21,19 +21,15 @@ const Bookshelf = () => {
     };
   }, shallowEqual);
 
-  // useEffect(() => {
-  //   dispatch(getUsersBookshelves());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(getUsersBookshelves());
+  }, [dispatch]);
 
   return (
     <Fragment>
       <BookshelfCreate />
 
-      <Container maxWidth="md">
-        <Typography component="h4" variant="h4">
-          View Bookshelves
-        </Typography>
-
+      <Container style={{ marginTop: "2rem" }} maxWidth="md">
         {loading ? (
           <CircularProgress />
         ) : (

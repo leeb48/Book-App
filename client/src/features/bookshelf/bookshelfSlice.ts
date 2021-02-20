@@ -6,6 +6,7 @@ import {
   createBookshelfReducer,
   getUsersBookshelvesReducer,
   removeBookFromBookshelfReducer,
+  removeBookshelfReducer,
   setBookshelfLoadingReducer,
   setSelectedBookshelfReducer,
 } from "./bookshelfCaseReducers";
@@ -47,6 +48,7 @@ const BookshelfSlice = createSlice({
   initialState,
   reducers: {
     createBookshelfSuccess: createBookshelfReducer,
+    removeBookshelfSuccess: removeBookshelfReducer,
     getUsersBookshelfSuccess: getUsersBookshelvesReducer,
     setBookshelfLoading: setBookshelfLoadingReducer,
     setSelectedBookshelf: setSelectedBookshelfReducer,
@@ -57,6 +59,7 @@ const BookshelfSlice = createSlice({
 
 export const {
   createBookshelfSuccess,
+  removeBookshelfSuccess,
   getUsersBookshelfSuccess,
   setBookshelfLoading,
   setSelectedBookshelf,

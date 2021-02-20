@@ -5,7 +5,7 @@ services:
   - docker
 
 script:
-  - cd server/ && mvn package -B
+  - mvn -f server/pom.xml package -B
 
 after_success:
   - docker build -t bongster228/book-app-server ./server

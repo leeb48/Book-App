@@ -20,38 +20,34 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@Table(name = "USER", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"username"})})
 public class User extends BaseEntity implements UserDetails {
+
+    @OneToMany(mappedBy = "user")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    Set<BookRating> ratings = new HashSet<>();
 
     @Email(message = "Username must be an email")
     @NotBlank(message = "Username is required")
     private String username;
-
     private String firstName;
-
     private String lastName;
-
     @NotNull
     @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
-
     private String providerId;
-
     @JsonIgnore
     @ToString.Exclude
     private String password;
-
     @JsonIgnore
     @ToString.Exclude
     private String refreshToken;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(updatable = false)
     private Date createAt;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date updatedAt;
-
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @ToString.Exclude
     @JsonIgnore

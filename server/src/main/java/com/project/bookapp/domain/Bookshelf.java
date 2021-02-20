@@ -1,6 +1,5 @@
 package com.project.bookapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +11,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@Table(name = "BOOKSHELF", uniqueConstraints = {@UniqueConstraint(columnNames = {"bookshelfIdentifier"})})
+@Table(name = "bookshelf", uniqueConstraints = {@UniqueConstraint(columnNames = {"bookshelfIdentifier"})})
 public class Bookshelf extends BaseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -21,11 +20,12 @@ public class Bookshelf extends BaseEntity {
             joinColumns = @JoinColumn(name = "bookshelf_id"),
             inverseJoinColumns = @JoinColumn(name = "book_id")
     )
+    @EqualsAndHashCode.Exclude
     Set<Book> books = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    @JsonIgnore
+    @EqualsAndHashCode.Exclude
     private User user;
 
     @NotBlank

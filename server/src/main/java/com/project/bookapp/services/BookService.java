@@ -88,6 +88,12 @@ public class BookService {
         return book;
     }
 
+    public Book getBookById(String bookId) {
+        Long id = Long.valueOf(bookId);
+
+        return bookRepo.findById(id).orElse(null);
+    }
+
     @Transactional
     public void removeBookFromBookshelf(String username, String bookshelfName, Book book) {
 

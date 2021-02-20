@@ -2,12 +2,12 @@ package com.project.bookapp.controllers;
 
 import com.project.bookapp.domain.Book;
 import com.project.bookapp.domain.Bookshelf;
+import com.project.bookapp.domain.User;
 import com.project.bookapp.domain.googlebooks.Item;
-import com.project.bookapp.payload.bookspayload.AddBooksToBookshelfRequest;
-import com.project.bookapp.payload.bookspayload.BookAddedResponse;
-import com.project.bookapp.payload.bookspayload.CreateBookshelfRequest;
-import com.project.bookapp.payload.bookspayload.RemoveBookFromBookshelfRequest;
+import com.project.bookapp.payload.bookspayload.*;
+import com.project.bookapp.services.BookRatingService;
 import com.project.bookapp.services.BookService;
+import com.project.bookapp.services.UserService;
 import com.project.bookapp.services.ValidationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +24,14 @@ public class BookController {
     public static final String BASE_URL = "/api/books";
 
     private final BookService bookService;
+    private final UserService userService;
+    private final BookRatingService bookRatingService;
     private final ValidationService validationService;
 
-    public BookController(BookService bookService, ValidationService validationService) {
+    public BookController(BookService bookService, UserService userService, BookRatingService bookRatingService, ValidationService validationService) {
         this.bookService = bookService;
+        this.userService = userService;
+        this.bookRatingService = bookRatingService;
         this.validationService = validationService;
     }
 
@@ -119,5 +123,29 @@ public class BookController {
         Bookshelf bookshelf = bookService.getBookshelf(username, bookshelfName);
 
         return new ResponseEntity<>(bookshelf, HttpStatus.OK);
+    }
+
+    @PostMapping("/rate-book")
+    public ResponseEntity<?> rateBook(@RequestBody BookRatingRequest request, Principal principal) {
+
+
+        User user = userService.findUserByUsername(principal.getName());
+        Book book = bookService.getBookById(request.getBookId());
+        int rating = request.getRating();
+
+
+        bookRatingService.rateBook(user, book, rating);
+
+        return ResponseEntity.ok("Book Rated");
+    }
+
+    @GetMapping("/get-rating/{bookId}")
+    public ResponseEntity<?> getBookRating(@PathVariable String bookId) {
+
+        Book book = bookService.getBookById(bookId);
+
+        double rating = bookRatingService.getBooksRating(book);
+
+        return ResponseEntity.ok(rating);
     }
 }

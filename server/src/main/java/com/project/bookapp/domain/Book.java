@@ -9,15 +9,23 @@ import com.project.bookapp.domain.googlebooks.IndustryIdentifier;
 import com.project.bookapp.domain.googlebooks.Item;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
-@Table(name = "BOOK", uniqueConstraints = {@UniqueConstraint(columnNames = {"googleBooksId"})})
+@Table(name = "book", uniqueConstraints = {@UniqueConstraint(columnNames = {"googleBooksId"})})
 public class Book extends BaseEntity {
+
+    @OneToMany(mappedBy = "book")
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    Set<BookRating> ratings = new HashSet<>();
 
     @Convert(converter = IndustryIdentifierConverter.class)
     private List<IndustryIdentifier> industryIdentifiers;

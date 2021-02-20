@@ -5,7 +5,7 @@ services:
   - docker
 
 script:
-  - mvn package -B
+  - cd server/ && mvn package -B
 
 after_success:
   - docker build -t bongster228/book-app-server ./server

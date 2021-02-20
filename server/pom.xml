@@ -115,6 +115,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <finalName>${artifactId}</finalName>
                 </configuration>
             </plugin>
         </plugins>

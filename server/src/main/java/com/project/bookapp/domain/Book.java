@@ -20,7 +20,7 @@ import java.util.List;
 public class Book extends BaseEntity {
 
     @Convert(converter = IndustryIdentifierConverter.class)
-    private List<IndustryIdentifier> industryIdentifier;
+    private List<IndustryIdentifier> industryIdentifiers;
     private String googleBooksId;
     private String title;
     private String subtitle;
@@ -39,7 +39,7 @@ public class Book extends BaseEntity {
 
     public Book(Item googleBookItem) {
         this.googleBooksId = googleBookItem.id;
-        this.industryIdentifier = googleBookItem.volumeInfo.industryIdentifiers;
+        this.industryIdentifiers = googleBookItem.volumeInfo.industryIdentifiers;
         this.title = googleBookItem.volumeInfo.title;
         this.subtitle = googleBookItem.volumeInfo.subtitle;
         this.authors = googleBookItem.volumeInfo.authors;

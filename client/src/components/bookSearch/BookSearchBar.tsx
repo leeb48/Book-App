@@ -101,7 +101,7 @@ const BookSearchBar = () => {
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography>Search Details</Typography>
+                <Typography variant="subtitle1">Advanced Search</Typography>
               </AccordionSummary>
               <AccordionDetails>
                 <Grid container justify="center">

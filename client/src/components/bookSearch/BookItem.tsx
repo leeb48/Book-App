@@ -1,4 +1,4 @@
-import { Grid, makeStyles, Paper } from "@material-ui/core";
+import { Grid, makeStyles, Paper, Typography } from "@material-ui/core";
 import { ItemsEntity } from "interfaces/bookSearchResponse.interface";
 import React from "react";
 import AddToBookshelfSelector from "./AddToBookshelfSelector";
@@ -27,6 +27,23 @@ const BookItem = ({ book }: Props) => {
   const EMPTY_BOOK_URL =
     "https://books.google.com/books/content?id=ezqe1hh91q4C&pg=PR3&img=1&zoom=5&sig=bBmzIAIiCtMcM7Ii7TUHycqqEWg";
 
+  const title = JSON.stringify(book.volumeInfo.title).replace(/['"]+/g, "");
+  const authors = book.volumeInfo.authors?.join(", ");
+  const desc = book.volumeInfo.description
+    ? JSON.stringify(book.volumeInfo.description)
+        .substr(0, 300)
+        .replace(/['"]+/g, "") + " (cont...)"
+    : "No Description Provided";
+  const publisher = book.volumeInfo.publisher
+    ? JSON.stringify(book.volumeInfo.publisher).replace(/['"]+/g, "")
+    : "No Publisher";
+  const isbn = book.volumeInfo.industryIdentifiers?.map((isbn) => (
+    <Typography key={isbn.identifier} variant="body2">
+      {`${isbn.type.replace(/[_]+/g, " ")}: ${isbn.identifier}\n`}
+    </Typography>
+  ));
+  const categories = book.volumeInfo.categories?.join(",");
+
   return (
     <Paper elevation={3}>
       <Grid
@@ -45,23 +62,16 @@ const BookItem = ({ book }: Props) => {
           item
           xs={3}
         />
-        <Grid container item xs={8}>
+        <Grid container direction="column" justify="space-between" item xs={8}>
           <Grid item>
-            Title: {JSON.stringify(book.volumeInfo.title)}
+            <Typography variant="h5">{title}</Typography>
+            <Typography variant="subtitle1">{authors}</Typography>
+            <Typography variant="body2">{categories}</Typography>
             <br />
-            Author(s): {JSON.stringify(book.volumeInfo.authors)}
+            <Typography variant="body1">{desc}</Typography>
             <br />
-            Description:{" "}
-            {`${JSON.stringify(book.volumeInfo.description).substr(
-              0,
-              600
-            )} (cont...)`}
-            <br />
-            Publisher: {JSON.stringify(book.volumeInfo.publisher)}
-            <br />
-            ISBN: {JSON.stringify(book.volumeInfo.industryIdentifiers)}
-            <br />
-            Subject: {JSON.stringify(book.volumeInfo.categories)}
+            {isbn}
+            <Typography variant="body2">{publisher}</Typography>
           </Grid>
           <Grid item>
             <AddToBookshelfSelector book={book} />

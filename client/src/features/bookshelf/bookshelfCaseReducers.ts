@@ -10,6 +10,16 @@ export const createBookshelfReducer: CaseReducer<
   state.currentUsersBookshelves.push(payload);
 };
 
+export const removeBookshelfReducer: CaseReducer<
+  BookshelfState,
+  PayloadAction<string>
+> = (state, { payload }) => {
+  const index = state.currentUsersBookshelves.findIndex(
+    (bookshelf) => bookshelf.bookshelfName === payload
+  );
+  state.currentUsersBookshelves.splice(index, 1);
+};
+
 export const getUsersBookshelvesReducer: CaseReducer<
   BookshelfState,
   PayloadAction<Bookshelf[]>

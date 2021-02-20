@@ -19,6 +19,7 @@ import {
   Bookshelf,
   CreateBookshelfDto,
   removeBookFromBookshelfSuccess,
+  removeBookshelfSuccess,
 } from "./bookshelfSlice";
 
 export const createBookshelf = (data: CreateBookshelfDto): AppThunk => async (
@@ -48,6 +49,20 @@ export const createBookshelf = (data: CreateBookshelfDto): AppThunk => async (
         setAlert({ alertType: "error", message: "Could Not Create Bookshelf" })
       );
     }
+  }
+};
+
+export const removeBookshelf = (bookshelfName: string): AppThunk => async (
+  dispatch
+) => {
+  try {
+    const res = await springAxios.delete<string>(
+      `/books/remove/${bookshelfName}`
+    );
+    dispatch(removeBookshelfSuccess(bookshelfName));
+    dispatch(setAlert({ alertType: "info", message: res.data }));
+  } catch (error) {
+    console.log(error);
   }
 };
 

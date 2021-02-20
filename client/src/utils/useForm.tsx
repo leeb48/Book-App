@@ -9,5 +9,6 @@ export const useForm = <T,>(intialFormValues: T) => {
   return {
     values,
     onChange,
+    setValues,
   };
 };

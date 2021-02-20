@@ -1,0 +1,19 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+script:
+  - mvn package -B
+
+after_success:
+  - docker build -t bongster228/book-app-server ./server
+  - docker build -t bongster228/book-app-client ./client
+  - docker build -t bongster228/book-app-nginx ./nginx
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+  - docker push bongster228/book-app-server
+  - docker push bongster228/book-app-client
+  - docker push bongster228/book-app-nginx

@@ -28,3 +28,7 @@ spring:
             clientId: ${GITHUB_CLIENT_ID}
             clientSecret: ${GITHUB_CLIENT_SECRET}
             redirectUri: ${OAUTH2_REDIRECT_URL}
+
+oauth2:
+  successUrl: http://localhost:3000
+  failureUrl: http://localhost:3000/login-error

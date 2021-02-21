@@ -20,11 +20,15 @@ spring:
           google:
             clientId: ${GOOGLE_CLIENT_ID}
             clientSecret: ${GOOGLE_CLIENT_SECRET}
-            redirectUri: ${OAUTH2_REDIRECT_URL}
+            redirectUri: ${OAUTH2_REDIRECT_URL_PROD}
             scope:
               - profile
               - email
           github:
-            clientId: ${GITHUB_CLIENT_ID}
-            clientSecret: ${GITHUB_CLIENT_SECRET}
-            redirectUri: ${OAUTH2_REDIRECT_URL}
+            clientId: ${GITHUB_CLIENT_ID_PROD}
+            clientSecret: ${GITHUB_CLIENT_SECRET_PROD}
+            redirectUri: ${OAUTH2_REDIRECT_URL_PROD}
+
+oauth2:
+  successUrl: http://128.199.13.150:80
+  failureUrl: http://128.199.13.150:80/login-error

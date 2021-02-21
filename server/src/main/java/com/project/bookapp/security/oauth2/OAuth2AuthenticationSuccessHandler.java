@@ -1,5 +1,6 @@
 package com.project.bookapp.security.oauth2;
 
+import com.project.bookapp.config.Oauth2Properties;
 import com.project.bookapp.domain.User;
 import com.project.bookapp.exceptions.oauth2exceptions.Oauth2AuthenticationException;
 import com.project.bookapp.security.jwt.JwtTokenProvider;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static com.project.bookapp.security.SecurityConstants.OAUTH2_SUCCESS_REDIRECT_URL;
 import static com.project.bookapp.security.SecurityConstants.TOKEN_COOKIE_EXPIRE_TIME;
 
 @Component
@@ -22,10 +22,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserService userService;
+    private final Oauth2Properties oauth2Properties;
 
-    public OAuth2AuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public OAuth2AuthenticationSuccessHandler(JwtTokenProvider jwtTokenProvider, UserService userService, Oauth2Properties oauth2Properties) {
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
+        this.oauth2Properties = oauth2Properties;
     }
 
     @Override
@@ -62,6 +64,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         response.addCookie(jwtCookie);
         response.addCookie(refreshTokenCookie);
 
-        response.sendRedirect(OAUTH2_SUCCESS_REDIRECT_URL);
+        response.sendRedirect(oauth2Properties.getSuccessUrl());
     }
 }

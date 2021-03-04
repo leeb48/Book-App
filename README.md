@@ -23,11 +23,11 @@ https://bookkeeper.bonglee.cloud/
 
 The following environment variables must be set in a .env file. Google and GitHub Oauth2 must be established to acquire ID and SECRET.
 
-[Google Oauth 2 Instructions](https://developers.google.com/identity/protocols/oauth2)
+<a href="https://developers.google.com/identity/protocols/oauth2" target="_blank">Google Oauth 2 Instructions</a>
 
-[GitHub Oauth 2 Instructions](https://docs.github.com/en/developers/apps/authorizing-oauth-apps)
+<a href="https://docs.github.com/en/developers/apps/authorizing-oauth-apps" target="_blank">GitHub Oauth 2 Instructions</a>
 
-Please follow the instruction [here](https://developers.google.com/books/docs/v1/using) to acquire the API_KEY for Google Books API.
+Please follow the instruction <a href="https://developers.google.com/books/docs/v1/using" target="_blank">here</a> to acquire the API_KEY for Google Books API.
 
 ```
 JWT_SECRET=

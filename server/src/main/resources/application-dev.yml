@@ -1,8 +1,10 @@
 spring:
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5432/postgres
+    url: jdbc:postgresql://165.232.152.120:5432/postgres
     username: postgres
     password: postgres
+    hikari:
+      auto-commit: false
 
   jpa:
     show-sql: true
@@ -20,15 +22,15 @@ spring:
           google:
             clientId: ${GOOGLE_CLIENT_ID}
             clientSecret: ${GOOGLE_CLIENT_SECRET}
-            redirectUri: ${OAUTH2_REDIRECT_URL}
+            redirectUri: ${OAUTH2_REDIRECT_URL_PROD}
             scope:
               - profile
               - email
           github:
-            clientId: ${GITHUB_CLIENT_ID}
-            clientSecret: ${GITHUB_CLIENT_SECRET}
-            redirectUri: ${OAUTH2_REDIRECT_URL}
+            clientId: ${GITHUB_CLIENT_ID_PRDO}
+            clientSecret: ${GITHUB_CLIENT_SECRET_PROD}
+            redirectUri: ${OAUTH2_REDIRECT_URL_PROD}
 
 oauth2:
-  successUrl: http://localhost:3000
-  failureUrl: http://localhost:3000/login-error
+  successUrl: http://bookkeeper.bonglee.cloud
+  failureUrl: http://bookkeeper.bonglee.cloud/login-error

@@ -1,17 +1,19 @@
 spring:
   datasource:
-    url: jdbc:postgresql://host.docker.internal:5432/postgres
-    username: user
-    password: password
+    url: jdbc:postgresql:/postgres:5432/postgres
+    username: postgres
+    password: postgres
+    hikari:
+      auto-commit: false
 
   jpa:
+    show-sql: true
     hibernate:
       ddl-auto: update
-      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL57Dialect
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   security:
     oauth2:
@@ -25,10 +27,10 @@ spring:
               - profile
               - email
           github:
-            clientId: ${GITHUB_CLIENT_ID_PROD}
+            clientId: ${GITHUB_CLIENT_ID_PRDO}
             clientSecret: ${GITHUB_CLIENT_SECRET_PROD}
             redirectUri: ${OAUTH2_REDIRECT_URL_PROD}
 
 oauth2:
-  successUrl: http://128.199.13.150:80
-  failureUrl: http://128.199.13.150:80/login-error
+  successUrl: http://bookkeeper.bonglee.cloud
+  failureUrl: http://bookkeeper.bonglee.cloud/login-error

@@ -45,10 +45,12 @@ const BookshelfList = ({ bookshelves }: Props) => {
           <Paper style={{ padding: "1rem", margin: ".5rem" }} elevation={3}>
             <Grid container justify="space-between">
               <Grid item>
-                <Typography component="p" variant="subtitle1">
+                <Typography component="p" variant="h6">
                   Name: {bookshelf.bookshelfName}
                 </Typography>
-                <Typography>Book Count: {bookshelf.books.length}</Typography>
+                <Typography component="p" variant="body1">
+                  Book Count: {bookshelf.books.length}
+                </Typography>
               </Grid>
               <Grid item>
                 <Button

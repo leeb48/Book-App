@@ -97,7 +97,8 @@ export default function Pricing() {
           color="textSecondary"
           component="p"
         >
-          Some descriptions about the app and how to use it.
+          Create bookshelves to keep all your favorite books with the Book
+          Keeper App!!
         </Typography>
       </Container>
       {/* End hero unit */}

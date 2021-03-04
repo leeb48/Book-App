@@ -18,9 +18,10 @@ const initialFormValues: CreateBookshelfDto = {
 
 const BookshelfCreate = () => {
   const dispatch = useAppDispatch();
-  const { inputErrors } = useSelector((state: RootState) => {
+  const { inputErrors, username } = useSelector((state: RootState) => {
     return {
       inputErrors: state.alerts.inputErrors,
+      username: state.user.userInfo?.username.match(/[^@]*/i),
     };
   }, shallowEqual);
 
@@ -41,7 +42,7 @@ const BookshelfCreate = () => {
       <Grid container justify="space-between" style={{ marginTop: "2rem" }}>
         <Grid item>
           <Typography component="h4" variant="h4">
-            Create Bookshelf
+            {username}'s Bookshelves
           </Typography>
         </Grid>
 

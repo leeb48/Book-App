@@ -206,12 +206,6 @@ export default function Register() {
           </Grid>
         </form>
       </div>
-      <Box mt={5}>
-        <Link component={RouterLink} to="/" variant="body2">
-          Go To Landing
-        </Link>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

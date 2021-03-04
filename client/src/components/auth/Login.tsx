@@ -170,11 +170,6 @@ export default function Login() {
           </Button>
 
           <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
             <Grid item>
               <RegisterLink>
                 <Link variant="body2">{"Don't have an account? Sign Up"}</Link>
@@ -183,12 +178,6 @@ export default function Login() {
           </Grid>
         </form>
       </div>
-      <Box mt={8}>
-        <Link component={RouterLink} to="/" variant="body2">
-          Go To Landing
-        </Link>
-        <Copyright />
-      </Box>
     </Container>
   );
 }

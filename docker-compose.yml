@@ -1,23 +1,23 @@
-version: "3"
+version: '3'
 services:
-  book-app-nginx:
+  book-keeper-nginx:
     depends_on:
-      - backend
-      - client
+      - book-keeper-backend
+      - book-keeper-client
     restart: always
     build:
       dockerfile: Dockerfile
       context: ./nginx
     ports:
-      - "3002:3002"
+      - '3002:3002'
 
-  backend:
+  book-keeper-backend:
     build:
       dockerfile: Dockerfile
       context: ./server
     env_file: .env
 
-  client:
+  book-keeper-client:
     stdin_open: true
     build:
       dockerfile: Dockerfile
@@ -26,4 +26,7 @@ services:
 networks:
   default:
     external:
-      name: nginx-proxy
+      name: droplet-proxy
+# Port configuration
+# book-keeper-nginx:3002 ---> book-keeper-backend:8002
+# book-keeper-nginx:3002 ---> book-keeper-client:5002

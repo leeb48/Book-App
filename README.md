@@ -44,6 +44,8 @@ API_KEY=
 
 ```
 
+Lastly the backend needs PostgreSQL running on docker on port 5432 as its database.
+
 #### Using npm & docker-compose
 
 There is a build.sh file that packages the maven project and builds the docker images for both client and server side. Run the below command.

@@ -1,6 +1,7 @@
 import {
   AppBar,
   Button,
+  IconButton,
   makeStyles,
   Theme,
   Toolbar,
@@ -13,6 +14,7 @@ import RegisterLink from "components/auth/RegisterLink";
 import RouterLink from "components/routing/RouterLink";
 import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
+import GitHubIcon from "@material-ui/icons/GitHub";
 
 const useStyles = makeStyles((theme: Theme) => ({
   "@global": {
@@ -83,7 +85,14 @@ const Navbar = () => {
           noWrap
           className={classes.toolbarTitle}
         >
-          Book App
+          <RouterLink variant="h5" to="/" color="textPrimary">
+            The Book Keeper
+          </RouterLink>
+          <IconButton
+            onClick={() => window.open("https://github.com/leeb48/Book-App")}
+          >
+            <GitHubIcon style={{ width: 35, height: 35 }} color="primary" />
+          </IconButton>
         </Typography>
         <nav>
           <RouterLink

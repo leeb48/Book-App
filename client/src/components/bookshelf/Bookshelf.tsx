@@ -9,21 +9,31 @@ import { useAppDispatch } from "app/store";
 import { getUsersBookshelves } from "features/bookshelf";
 import React, { Fragment, useEffect } from "react";
 import { shallowEqual, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 import BookshelfCreate from "./BookshelfCreate";
 import BookshelfList from "./BookshelfList";
 
 const Bookshelf = () => {
   const dispatch = useAppDispatch();
-  const { bookshelves, loading } = useSelector((state: RootState) => {
-    return {
-      bookshelves: state.bookshelf.currentUsersBookshelves,
-      loading: state.bookshelf.loading,
-    };
-  }, shallowEqual);
+  const { isAuthenticated, bookshelves, loading } = useSelector(
+    (state: RootState) => {
+      return {
+        isAuthenticated: state.user.isAuthenticated,
+        bookshelves: state.bookshelf.currentUsersBookshelves,
+        loading: state.bookshelf.loading,
+      };
+    },
+    shallowEqual
+  );
+
+  const history = useHistory();
 
   useEffect(() => {
+    if (!isAuthenticated) {
+      history.push("/register");
+    }
     dispatch(getUsersBookshelves());
-  }, [dispatch]);
+  }, [dispatch, isAuthenticated, history]);
 
   return (
     <Fragment>

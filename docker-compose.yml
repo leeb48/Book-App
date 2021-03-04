@@ -1,6 +1,6 @@
 version: "3"
 services:
-  nginx:
+  book-app-nginx:
     depends_on:
       - backend
       - client
@@ -8,10 +8,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./nginx
-    environment:
-      PORT: 80
     ports:
-      - "80:80"
+      - "3002:3002"
 
   backend:
     build:
@@ -24,3 +22,8 @@ services:
     build:
       dockerfile: Dockerfile
       context: ./client
+
+networks:
+  default:
+    external:
+      name: nginx-proxy

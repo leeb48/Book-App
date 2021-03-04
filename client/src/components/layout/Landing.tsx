@@ -56,7 +56,6 @@ const tiers = [
     description: [
       "Search through millions of books with Google Books API",
       "Make detailed searches using ISBN, publisher names, and more",
-      "Check out user review scores for the books!",
     ],
     buttonText: "Go To Search Page",
     buttonVariant: "contained",
@@ -67,7 +66,6 @@ const tiers = [
     description: [
       "Create many personal bookshelves",
       "Add all your favorite books",
-      "Share your bookshelves with other users",
     ],
     buttonText: "Go to bookshelves",
     buttonVariant: "outlined",
@@ -82,15 +80,16 @@ export default function Pricing() {
     <React.Fragment>
       <CssBaseline />
       {/* Hero unit */}
-      <Container maxWidth="sm" component="main" className={classes.heroContent}>
+      <Container maxWidth="md" component="main" className={classes.heroContent}>
         <Typography
           component="h3"
           variant="h3"
           align="center"
           color="textPrimary"
+          noWrap
           gutterBottom
         >
-          Welcome to the Book App
+          Welcome to the Book Keeper
         </Typography>
         <Typography
           variant="h5"
